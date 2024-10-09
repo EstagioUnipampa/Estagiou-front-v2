@@ -2,13 +2,19 @@ import React from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useAppFonts } from "./src/hooks/useAppFonts";
 
 export default function AuthPage() {
+  let fontsLoaded = useAppFonts();
+
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -77,7 +83,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "600",
     color: "white",
-    fontFamily: "Poppins",
     textAlign: "left",
   },
   card: {
@@ -105,6 +110,6 @@ const styles = StyleSheet.create({
   },
   cardDescription: {
     fontSize: 14,
-    fontFamily: "Poppins",
+    fontFamily: "Poppins_900Black_Italic",
   },
 });

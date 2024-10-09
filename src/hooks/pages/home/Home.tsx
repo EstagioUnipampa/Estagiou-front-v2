@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   textHome: {
     color: "white",
-    // fontFamily: "Poppins_600SemiBold",
+    fontFamily: "Poppins_600SemiBold",
     fontSize: 24,
     textAlign: "left",
   },

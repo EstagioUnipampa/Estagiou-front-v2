@@ -15,6 +15,7 @@ export default function Card({
     <TouchableOpacity
       style={styles.container}
       onPress={() => console.log(title)}
+      activeOpacity={0.7}
     >
       <Image source={source} style={styles.icon} />
       <View style={styles.textContent}>

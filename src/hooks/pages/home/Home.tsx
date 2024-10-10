@@ -7,6 +7,7 @@ import Card from "./components/Card";
 type RootStackParamList = {
   Home: undefined;
   StudentLogin: undefined;
+  BusinessLogin: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
@@ -41,7 +42,7 @@ export default function Home({ navigation }: Readonly<Props>) {
             source={require("../../../../assets/images/entrepreneur.png")}
             title="Empresa"
             description="Ofereça vagas para estágio disponíveis na sua empresa"
-            onPress={() => console.log("Empresa")}
+            onPress={() => navigation.navigate("BusinessLogin")}
           />
         </View>
       </View>

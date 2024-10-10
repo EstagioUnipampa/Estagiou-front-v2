@@ -1,9 +1,9 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from "./src/hooks/pages/home/Home";
-import StudentLogin from "./src/hooks/pages/student_login/StudentLogin";
-import BusinessLogin from "./src/hooks/pages/business_login/BusinessLogin";
+import Home from "./src/pages/home/Home";
+import StudentLogin from "./src/pages/student_login/StudentLogin";
+import BusinessLogin from "./src/pages/business_login/BusinessLogin";
 
 const Stack = createStackNavigator();
 

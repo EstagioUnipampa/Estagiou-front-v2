@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useAppFonts } from "../../../useAppFonts";
+import { useAppFonts } from "../../hooks/useAppFonts";
 
 interface ModalAlertProps {
   value: boolean;

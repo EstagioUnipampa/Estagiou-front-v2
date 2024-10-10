@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { useAppFonts } from "../../useAppFonts";
+import { useAppFonts } from "../../hooks/useAppFonts";
 import Card from "./components/Card";
 
 type RootStackParamList = {
@@ -26,20 +26,20 @@ export default function Home({ navigation }: Readonly<Props>) {
   return (
     <LinearGradient style={styles.container} colors={["#004507", "#23a331"]}>
       <Image
-        source={require("../../../../assets/icon/logoEstagiou.png")}
+        source={require("../../../assets/icon/logoEstagiou.png")}
         style={styles.logo}
       />
       <View style={styles.content}>
         <Text style={styles.textHome}>Acesse como:</Text>
         <View style={styles.cardGroup}>
           <Card
-            source={require("../../../../assets/images/student.png")}
+            source={require("../../../assets/images/student.png")}
             title="Estudante"
             description="Visualize as vagas disponiveis para estágio"
             onPress={() => navigation.navigate("StudentLogin")}
           />
           <Card
-            source={require("../../../../assets/images/entrepreneur.png")}
+            source={require("../../../assets/images/entrepreneur.png")}
             title="Empresa"
             description="Ofereça vagas para estágio disponíveis na sua empresa"
             onPress={() => navigation.navigate("BusinessLogin")}

@@ -1,16 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useAppFonts } from "../../../useAppFonts";
+import { useAppFonts } from "../../hooks/useAppFonts";
 
-interface OptionTextProps {
+interface ButtonProps {
   text: string;
   onPress: () => void;
 }
 
-export default function OptionText({
-  text,
-  onPress,
-}: Readonly<OptionTextProps>) {
+export default function Button({ text, onPress }: Readonly<ButtonProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
@@ -31,12 +28,16 @@ export default function OptionText({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    height: 64,
+    backgroundColor: "#23A331",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 50,
   },
   textButton: {
-    color: "#585858",
-    fontFamily: "Poppins_400Regular",
+    color: "white",
+    fontFamily: "Poppins_600SemiBold",
     fontSize: 16,
+    textTransform: "uppercase",
   },
 });

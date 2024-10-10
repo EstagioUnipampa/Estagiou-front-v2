@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { useAppFonts } from "../../../useAppFonts";
+import { useAppFonts } from "../../hooks/useAppFonts";
 
 interface HeaderProps {
   title: string;
@@ -27,7 +27,7 @@ export default function HeaderBack({ title, onPress }: Readonly<HeaderProps>) {
       <View style={styles.notifications} />
       <View style={styles.headerContent}>
         <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-          <Image source={require("../../../../../assets/icon/btnBack.png")} />
+          <Image source={require("../../../assets/icon/btnBack.png")} />
         </TouchableOpacity>
         <Text style={styles.textHeader}>{title}</Text>
       </View>

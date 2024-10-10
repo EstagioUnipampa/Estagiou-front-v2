@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useAppFonts } from "../../useAppFonts";
-import Button from "../components/button/Button";
-import HeaderBack from "../components/headerBack/HeaderBack";
-import InputText from "../components/inputText/InputText";
-import ModalAlert from "../components/modalAlert/ModalAlert";
+import { useAppFonts } from "../../hooks/useAppFonts";
+import Button from "../../components/button/Button";
+import HeaderBack from "../../components/headerBack/HeaderBack";
+import InputText from "../../components/inputText/InputText";
+import ModalAlert from "../../components/modalAlert/ModalAlert";
 
 type RootStackParamList = {
   Home: undefined;

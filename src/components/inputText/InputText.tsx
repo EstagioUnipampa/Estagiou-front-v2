@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useAppFonts } from "../../../useAppFonts";
+import { useAppFonts } from "../../hooks/useAppFonts";
 
 interface InputTextProps {
   placeholder: string;
@@ -45,13 +45,13 @@ export default function InputText({
           {secureTextEntry && (
             <Image
               style={styles.icon}
-              source={require("../../../../../assets/icon/eye.png")}
+              source={require("../../../assets/icon/eye.png")}
             />
           )}
           {!secureTextEntry && (
             <Image
               style={styles.icon}
-              source={require("../../../../../assets/icon/eyeOff.png")}
+              source={require("../../../assets/icon/eyeOff.png")}
             />
           )}
         </TouchableOpacity>

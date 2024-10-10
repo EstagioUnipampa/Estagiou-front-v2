@@ -42,6 +42,12 @@ export default function StudentLogin({ navigation }: Readonly<Props>) {
     setShowPassword(!showPassword);
   }
 
+  function handleLogin() {
+    console.log("DADOS QUE SERÃO ENVIADOS: ");
+    console.log("Email: ", email);
+    console.log("Senha: ", senha);
+  }
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -91,7 +97,7 @@ export default function StudentLogin({ navigation }: Readonly<Props>) {
             ></InputText>
           </View>
           <View style={styles.buttonGroup}>
-            <Button text="Login" onPress={() => console.log("LOGIN")} />
+            <Button text="Login" onPress={handleLogin} />
             <OptionText
               text="Não possui conta? Cadastre-se"
               onPress={() => navigation.navigate("StudentRegister")}

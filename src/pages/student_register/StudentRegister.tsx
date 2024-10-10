@@ -46,6 +46,14 @@ export default function StudentRegister({ navigation }: Readonly<Props>) {
     setShowPassword(!showPassword);
   }
 
+  function handleRegister() {
+    console.log("DADOS QUE SERÃO ENVIADOS: ");
+    console.log("Email: ", email);
+    console.log("Senha: ", password);
+    console.log("Nome: ", name);
+    console.log("Sobrenome: ", lastName);
+  }
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -105,7 +113,7 @@ export default function StudentRegister({ navigation }: Readonly<Props>) {
               ></InputText>
             </View>
             <View style={styles.buttonGroup}>
-              <Button text="Login" onPress={() => console.log("LOGIN")} />
+              <Button text="Login" onPress={handleRegister} />
               <OptionText
                 text="Já possui conta? Faça login"
                 onPress={() => navigation.navigate("StudentLogin")}
@@ -136,7 +144,7 @@ export default function StudentRegister({ navigation }: Readonly<Props>) {
               value={modalVisible}
               setValue={setModalVisible}
               title="Primeira vez no App?"
-              description="Realize seu login para acessar as vagas de estágio disponíveis. Caso não possua uma conta, realize o cadastro."
+              description="Utilize o email da sua instituição de ensino para realizar o cadastro. Caso não possua um email institucional, entre em contato com a sua instituição."
             />
           </View>
         )}

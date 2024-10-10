@@ -38,17 +38,17 @@ export default function InputText({
         placeholder={placeholder}
         cursorColor={"#000"}
         onChange={(e) => onChange(e.nativeEvent.text)}
-        secureTextEntry={inputPassword && secureTextEntry}
+        secureTextEntry={inputPassword && !secureTextEntry}
       />
       {inputPassword && (
         <TouchableOpacity onPress={handleShowPassword} activeOpacity={0.7}>
-          {secureTextEntry && (
+          {!secureTextEntry && (
             <Image
               style={styles.icon}
               source={require("../../../assets/icon/eye.png")}
             />
           )}
-          {!secureTextEntry && (
+          {secureTextEntry && (
             <Image
               style={styles.icon}
               source={require("../../../assets/icon/eyeOff.png")}

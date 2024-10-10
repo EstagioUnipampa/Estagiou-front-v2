@@ -17,6 +17,7 @@ import OptionText from "../../components/optionText/OptionText";
 type RootStackParamList = {
   Home: undefined;
   StudentLogin: undefined;
+  StudentRegister: undefined;
 };
 
 type StudentLoginScreenNavigationProp = StackNavigationProp<
@@ -93,7 +94,7 @@ export default function StudentLogin({ navigation }: Readonly<Props>) {
             <Button text="Login" onPress={() => console.log("LOGIN")} />
             <OptionText
               text="Não possui conta? Cadastre-se"
-              onPress={() => console.log("CADASTRO")}
+              onPress={() => navigation.navigate("StudentRegister")}
             />
           </View>
         </View>

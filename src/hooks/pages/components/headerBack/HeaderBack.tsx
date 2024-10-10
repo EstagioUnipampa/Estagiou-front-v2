@@ -12,9 +12,10 @@ import { useAppFonts } from "../../../useAppFonts";
 
 interface HeaderProps {
   title: string;
+  onPress: () => void;
 }
 
-export default function Header({ title }: Readonly<HeaderProps>) {
+export default function HeaderBack({ title, onPress }: Readonly<HeaderProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
@@ -25,10 +26,7 @@ export default function Header({ title }: Readonly<HeaderProps>) {
     <SafeAreaView style={styles.container}>
       <View style={styles.notifications} />
       <View style={styles.headerContent}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => console.log("Voltar")}
-        >
+        <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
           <Image source={require("../../../../../assets/icon/btnBack.png")} />
         </TouchableOpacity>
         <Text style={styles.textHeader}>{title}</Text>

@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import {
   Keyboard,
@@ -8,12 +9,26 @@ import {
 } from "react-native";
 import { useAppFonts } from "../../useAppFonts";
 import Button from "../components/button/Button";
-import Header from "../components/headerBack/Header";
+import HeaderBack from "../components/headerBack/HeaderBack";
 import InputText from "../components/inputText/InputText";
 import ModalAlert from "../components/modalAlert/ModalAlert";
 import OptionText from "../components/optionText/OptionText";
 
-export default function StudentLogin() {
+type RootStackParamList = {
+  Home: undefined;
+  StudentLogin: undefined;
+};
+
+type StudentLoginScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "StudentLogin"
+>;
+
+type Props = {
+  navigation: StudentLoginScreenNavigationProp;
+};
+
+export default function StudentLogin({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
   const [showPassword, setShowPassword] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -52,7 +67,10 @@ export default function StudentLogin() {
 
   return (
     <View style={styles.container}>
-      <Header title="Estudante" />
+      <HeaderBack
+        title="Estudante"
+        onPress={() => navigation.navigate("Home")}
+      />
       <View style={styles.content}>
         <View style={styles.textContent}>
           <Text style={styles.titleText}>Login</Text>

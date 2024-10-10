@@ -1,10 +1,21 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { useAppFonts } from "../../useAppFonts";
 import Card from "./components/Card";
 
-export default function Home() {
+type RootStackParamList = {
+  Home: undefined;
+  StudentLogin: undefined;
+};
+
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+export default function Home({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
@@ -24,11 +35,13 @@ export default function Home() {
             source={require("../../../../assets/images/student.png")}
             title="Estudante"
             description="Visualize as vagas disponiveis para estágio"
+            onPress={() => navigation.navigate("StudentLogin")}
           />
           <Card
             source={require("../../../../assets/images/entrepreneur.png")}
             title="Empresa"
             description="Ofereça vagas para estágio disponíveis na sua empresa"
+            onPress={() => console.log("Empresa")}
           />
         </View>
       </View>

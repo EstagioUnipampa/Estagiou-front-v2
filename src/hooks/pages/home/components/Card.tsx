@@ -4,17 +4,19 @@ interface CardProps {
   source: any;
   title: string;
   description: string;
+  onPress: () => void;
 }
 
 export default function Card({
   source,
   title,
   description,
+  onPress,
 }: Readonly<CardProps>) {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => console.log(title)}
+      onPress={onPress}
       activeOpacity={0.7}
     >
       <Image source={source} style={styles.icon} />

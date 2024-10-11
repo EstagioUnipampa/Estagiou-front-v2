@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Carousel, {
   ICarouselInstance,
   Pagination,
@@ -9,13 +16,13 @@ import SearchInput from "../../components/searchInput/SearchInput";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import Card from "./components/Card";
 import RecommendedCard from "./components/RecommendedCard";
-import React, { useState } from "react";
+import React from "react";
 import { useSharedValue } from "react-native-reanimated";
+import AvailableCard from "./components/AvailableCard";
 
 export default function StudentHome() {
   const fontsLoaded = useAppFonts();
   const data = [...new Array(5).keys()];
-  const [indexRecommendedWorks, setIndexRecommendedWorks] = useState(0);
   const progress = useSharedValue<number>(0);
 
   const ref = React.useRef<ICarouselInstance>(null);
@@ -99,7 +106,6 @@ export default function StudentHome() {
         height={109}
         style={{ width: "100%" }}
         mode="parallax"
-        onSnapToItem={(index) => setIndexRecommendedWorks(index)}
         modeConfig={{
           parallaxScrollingScale: 1,
           parallaxScrollingOffset: 1,
@@ -115,6 +121,37 @@ export default function StudentHome() {
           />
         )}
       />
+
+      <View style={styles.availableWorksHeader}>
+        <Text style={styles.availableWorksHeaderTitle}>Vagas disponíveis</Text>
+        <TouchableOpacity activeOpacity={0.7}>
+          <Text style={styles.avallableWorksMore}>Mais</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.availableWorksContainer}>
+        <AvailableCard
+          businessName="Nome Empresa"
+          title="Desenvolvimento de Sistemas"
+          salary="R$740,00"
+          location="São Paulo, Brasil"
+          source={require("../../../assets/images/companyLogo2.png")}
+        />
+        <AvailableCard
+          businessName="Nome Empresa"
+          title="Desenvolvimento de Sistemas"
+          salary="R$740,00"
+          location="São Paulo, Brasil"
+          source={require("../../../assets/images/companyLogo2.png")}
+        />
+        <AvailableCard
+          businessName="Nome Empresa"
+          title="Desenvolvimento de Sistemas"
+          salary="R$740,00"
+          location="São Paulo, Brasil"
+          source={require("../../../assets/images/companyLogo2.png")}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -177,5 +214,29 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     columnGap: 6,
+  },
+  availableWorksHeader: {
+    marginTop: 45,
+    marginBottom: 34,
+    paddingStart: 30,
+    paddingEnd: 30,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  availableWorksHeaderTitle: {
+    color: "#3D3D3D",
+    fontFamily: "Poppins_500Medium",
+    fontSize: 18,
+  },
+  avallableWorksMore: {
+    color: "#1A7924",
+    fontFamily: "Poppins_500Medium",
+    fontSize: 14,
+  },
+  availableWorksContainer: {
+    marginBottom: 30,
+    rowGap: 20,
   },
 });

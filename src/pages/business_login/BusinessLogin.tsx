@@ -36,6 +36,12 @@ export default function BusinessLogin({ navigation }: Readonly<Props>) {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
+  function onPress() {
+    console.log("DADOS QUE SERÃO ENVIADOS: ");
+    console.log("Email: ", email);
+    console.log("Senha: ", senha);
+  }
+
   function handleShowPassword() {
     setShowPassword(!showPassword);
   }
@@ -86,7 +92,7 @@ export default function BusinessLogin({ navigation }: Readonly<Props>) {
             ></InputText>
           </View>
           <View style={styles.buttonGroup}>
-            <Button text="Login" onPress={() => console.log("LOGIN")} />
+            <Button text="Login" onPress={onPress} />
           </View>
         </View>
       </View>

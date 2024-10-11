@@ -18,6 +18,7 @@ type RootStackParamList = {
   Home: undefined;
   StudentLogin: undefined;
   StudentRegister: undefined;
+  BottomTab: undefined;
 };
 
 type StudentLoginScreenNavigationProp = StackNavigationProp<
@@ -46,6 +47,8 @@ export default function StudentLogin({ navigation }: Readonly<Props>) {
     console.log("DADOS QUE SERÃO ENVIADOS: ");
     console.log("Email: ", email);
     console.log("Senha: ", senha);
+
+    navigation.navigate("BottomTab");
   }
 
   useEffect(() => {

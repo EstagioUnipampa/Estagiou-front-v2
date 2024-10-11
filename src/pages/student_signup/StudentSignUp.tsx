@@ -18,20 +18,20 @@ import ModalAlert from "../../components/modalAlert/ModalAlert";
 import OptionText from "../../components/optionText/OptionText";
 
 type RootStackParamList = {
-  StudentRegister: undefined;
+  StudentSignUp: undefined;
   StudentLogin: undefined;
 };
 
-type StudentRegisterScreenNavigationProp = StackNavigationProp<
+type StudentSignUpScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  "StudentRegister"
+  "StudentSignUp"
 >;
 
 type Props = {
-  navigation: StudentRegisterScreenNavigationProp;
+  navigation: StudentSignUpScreenNavigationProp;
 };
 
-export default function StudentRegister({ navigation }: Readonly<Props>) {
+export default function StudentSignUp({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
   const [showPassword, setShowPassword] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -46,7 +46,7 @@ export default function StudentRegister({ navigation }: Readonly<Props>) {
     setShowPassword(!showPassword);
   }
 
-  function handleRegister() {
+  function handleSignUp() {
     console.log("DADOS QUE SERÃO ENVIADOS: ");
     console.log("Email: ", email);
     console.log("Senha: ", password);
@@ -113,7 +113,7 @@ export default function StudentRegister({ navigation }: Readonly<Props>) {
               ></InputText>
             </View>
             <View style={styles.buttonGroup}>
-              <Button text="Login" onPress={handleRegister} />
+              <Button text="Login" onPress={handleSignUp} />
               <OptionText
                 text="Já possui conta? Faça login"
                 onPress={() => navigation.navigate("StudentLogin")}

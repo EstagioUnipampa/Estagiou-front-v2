@@ -1,23 +1,35 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import Carousel from "react-native-reanimated-carousel";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import Carousel, {
+  ICarouselInstance,
+  Pagination,
+} from "react-native-reanimated-carousel";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchInput from "../../components/searchInput/SearchInput";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import Card from "./components/Card";
-
-const { width: screenWidth } = Dimensions.get("window");
+import RecommendedCard from "./components/RecommendedCard";
+import React, { useState } from "react";
+import { useSharedValue } from "react-native-reanimated";
 
 export default function StudentHome() {
   const fontsLoaded = useAppFonts();
+  const data = [...new Array(5).keys()];
+  const [indexRecommendedWorks, setIndexRecommendedWorks] = useState(0);
+  const progress = useSharedValue<number>(0);
+
+  const ref = React.useRef<ICarouselInstance>(null);
+
+  const onPressPagination = (index: number) => {
+    ref.current?.scrollTo({
+      /**
+       * Calculate the difference between the current index and the target index
+       * to ensure that the carousel scrolls to the nearest index
+       */
+      count: index - progress.value,
+      animated: true,
+    });
+  };
 
   if (!fontsLoaded) {
     return <Text>Carregando...</Text>;
@@ -50,33 +62,59 @@ export default function StudentHome() {
         source={require("../../../assets/images/confirmed.png")}
       />
 
-      {/* <Carousel
+      <View style={styles.recommendedWorksHeader}>
+        <Text style={styles.recommendedWorksHeaderTitle}>
+          Vagas recomendadas
+        </Text>
+        <Pagination.Custom<{ index: any }>
+          progress={progress}
+          data={data.map((index) => ({ index }))}
+          dotStyle={{
+            width: 13,
+            height: 6,
+            backgroundColor: "#D6D6D6",
+            borderRadius: 14,
+          }}
+          activeDotStyle={{
+            width: 26,
+            overflow: "hidden",
+            backgroundColor: "#1A7924",
+          }}
+          containerStyle={{
+            gap: 6,
+          }}
+          horizontal
+          onPress={onPressPagination}
+        />
+      </View>
+
+      <Carousel
+        ref={ref}
         autoPlayInterval={2000}
         loop={true}
+        onProgressChange={progress}
         pagingEnabled={true}
         snapEnabled={true}
-        width={screenWidth}
-        height={258}
+        width={310}
+        height={109}
         style={{ width: "100%" }}
         mode="parallax"
+        onSnapToItem={(index) => setIndexRecommendedWorks(index)}
         modeConfig={{
-          parallaxScrollingScale: 0.9,
-          parallaxScrollingOffset: 50,
+          parallaxScrollingScale: 1,
+          parallaxScrollingOffset: 1,
         }}
-        data={[...new Array(6).keys()]}
+        data={data}
         renderItem={({ index }) => (
-          <Pressable
+          <RecommendedCard
+            title="Desenvolvedor Fullstack"
+            location="São Paulo, SP"
+            salary="R$ 3.000,00"
+            source={require("../../../assets/images/companyLogo1.png")}
             onPress={() => console.log(index)}
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
-          </Pressable>
+          />
         )}
-      /> */}
+      />
     </ScrollView>
   );
 }
@@ -120,5 +158,24 @@ const styles = StyleSheet.create({
     paddingStart: 30,
     paddingEnd: 30,
     paddingBottom: 25,
+  },
+  recommendedWorksHeader: {
+    paddingStart: 30,
+    paddingEnd: 30,
+    paddingBottom: 22,
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  recommendedWorksHeaderTitle: {
+    color: "#3D3D3D",
+    fontFamily: "Poppins_500Medium",
+    fontSize: 18,
+  },
+  indexesRecommendedWorks: {
+    display: "flex",
+    flexDirection: "row",
+    columnGap: 6,
   },
 });

@@ -1,12 +1,55 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import StudentHome from "../../pages/student_home/StudentHome";
-import StudentDocuments from "../../pages/student_documents/StudentDocuments";
-import { Image, Text } from "react-native";
-import StudentRegistrations from "../../pages/student_registrations/StudentRegistrations";
-import StudentProfile from "../../pages/student_profile/StudentRegistrations";
+import React from "react";
+import { Image, ImageSourcePropType, Text } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
+import StudentDocuments from "../../pages/student_documents/StudentDocuments";
+import StudentHome from "../../pages/student_home/StudentHome";
+import StudentProfile from "../../pages/student_profile/StudentRegistrations";
+import StudentRegistrations from "../../pages/student_registrations/StudentRegistrations";
 
 const Tab = createBottomTabNavigator();
+
+interface TabIconProps {
+  focused: boolean;
+  imageNonActive: ImageSourcePropType;
+  imageActive: ImageSourcePropType;
+}
+
+const TabIcon = ({ focused, imageNonActive, imageActive }: TabIconProps) => (
+  <Image source={focused ? imageActive : imageNonActive} />
+);
+
+const MenuTabIcon = ({ focused }: { focused: boolean }) => (
+  <TabIcon
+    focused={focused}
+    imageNonActive={require("../../../assets/icon/home.png")}
+    imageActive={require("../../../assets/icon/home-active.png")}
+  />
+);
+
+const DocumentosTabIcon = ({ focused }: { focused: boolean }) => (
+  <TabIcon
+    focused={focused}
+    imageNonActive={require("../../../assets/icon/document.png")}
+    imageActive={require("../../../assets/icon/document-active.png")}
+  />
+);
+
+const InscricoesTabIcon = ({ focused }: { focused: boolean }) => (
+  <TabIcon
+    focused={focused}
+    imageNonActive={require("../../../assets/icon/registrations.png")}
+    imageActive={require("../../../assets/icon/registrations-active.png")}
+  />
+);
+
+const PerfilTabIcon = ({ focused }: { focused: boolean }) => (
+  <TabIcon
+    focused={focused}
+    imageNonActive={require("../../../assets/icon/profile.png")}
+    imageActive={require("../../../assets/icon/profile-active.png")}
+  />
+);
 
 export default function BottomTab() {
   const fontsLoaded = useAppFonts();
@@ -17,9 +60,8 @@ export default function BottomTab() {
 
   return (
     <Tab.Navigator
-      screenOptions={() => ({
+      screenOptions={{
         headerShown: false,
-
         tabBarActiveBackgroundColor: "#23A331",
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "#1A7924",
@@ -31,74 +73,49 @@ export default function BottomTab() {
           fontSize: 12,
           marginBottom: 3,
         },
-      })}
+        tabBarHideOnKeyboard: true,
+        tabBarVisibilityAnimationConfig: {
+          show: {
+            animation: "timing",
+            config: {
+              duration: 100,
+            },
+          },
+          hide: {
+            animation: "timing",
+            config: {
+              duration: 100,
+            },
+          },
+        },
+      }}
     >
       <Tab.Screen
         name="Menu"
         component={StudentHome}
         options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={
-                  focused
-                    ? require("../../../assets/icon/home-active.png")
-                    : require("../../../assets/icon/home.png")
-                }
-              />
-            );
-          },
+          tabBarIcon: MenuTabIcon,
         }}
       />
       <Tab.Screen
         name="Documentos"
         component={StudentDocuments}
         options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={
-                  focused
-                    ? require("../../../assets/icon/document-active.png")
-                    : require("../../../assets/icon/document.png")
-                }
-              />
-            );
-          },
+          tabBarIcon: DocumentosTabIcon,
         }}
       />
       <Tab.Screen
         name="Inscrições"
         component={StudentRegistrations}
         options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={
-                  focused
-                    ? require("../../../assets/icon/registrations-active.png")
-                    : require("../../../assets/icon/registrations.png")
-                }
-              />
-            );
-          },
+          tabBarIcon: InscricoesTabIcon,
         }}
       />
       <Tab.Screen
         name="Perfil"
         component={StudentProfile}
         options={{
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Image
-                source={
-                  focused
-                    ? require("../../../assets/icon/profile-active.png")
-                    : require("../../../assets/icon/profile.png")
-                }
-              />
-            );
-          },
+          tabBarIcon: PerfilTabIcon,
         }}
       />
     </Tab.Navigator>

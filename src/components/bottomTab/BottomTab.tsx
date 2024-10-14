@@ -4,7 +4,7 @@ import { Image, ImageSourcePropType, Text } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import StudentDocuments from "../../pages/student_documents/StudentDocuments";
 import StudentHome from "../../pages/student_home/StudentHome";
-import StudentProfile from "../../pages/student_profile/StudentRegistrations";
+import StudentProfile from "../../pages/student_profile/StudentProfile";
 import StudentRegistrations from "../../pages/student_registrations/StudentRegistrations";
 
 const Tab = createBottomTabNavigator();

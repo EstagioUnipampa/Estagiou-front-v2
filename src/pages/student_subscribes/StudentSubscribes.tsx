@@ -1,11 +1,11 @@
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import Header from "../../components/header/Header";
 import SubscribeCard from "./components/SubscribeCard";
 
 export default function StudentRegistrations() {
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <Header title="Inscrições" />
       <View>
         <SubscribeCard
@@ -24,3 +24,9 @@ export default function StudentRegistrations() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#FBF6FF",
+  },
+});

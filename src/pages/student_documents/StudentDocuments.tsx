@@ -1,11 +1,11 @@
 import React from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import Header from "../../components/header/Header";
 import DocumentCard from "./components/DocumentCard";
 
 export default function StudentDocuments() {
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <Header title="Documentos" />
 
       <DocumentCard
@@ -47,3 +47,9 @@ export default function StudentDocuments() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#FBF6FF",
+  },
+});

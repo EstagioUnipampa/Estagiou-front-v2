@@ -1,11 +1,16 @@
-import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import HeaderBack from "../../components/headerBack/HeaderBack";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import OptionText from "../../components/optionText/OptionText";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from "react-native";
 import Button from "../../components/button/Button";
+import HeaderBack from "../../components/headerBack/HeaderBack";
 
 type RootStackParamList = {
   DetailsJobVacancy: {
@@ -48,68 +53,95 @@ export default function DetailsJobVacancy({
         onPress={() => navigation.goBack()}
       />
 
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.textContainer}>
-            <Text style={styles.businessName}>{businessName}</Text>
-            <Text style={styles.jobTitle}>{jobTitle}</Text>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.textContainer}>
+              <Text style={styles.businessName}>{businessName}</Text>
+              <Text style={styles.jobTitle}>{jobTitle}</Text>
+            </View>
+            <Image source={logo} style={styles.logo} />
           </View>
-          <Image source={logo} style={styles.logo} />
-        </View>
 
-        <View style={styles.separator} />
+          <View style={styles.separator} />
 
-        {/* Seção de Remuneração com ícone */}
-        <View style={styles.row}>
-          <View style={styles.iconContainer}>
-            <Image
-              style={styles.salaryIcon}
-              source={require("../../../assets/icon/coins_white.png")}
+          {/* Seção de Remuneração com ícone */}
+          <View style={styles.row}>
+            <View style={styles.iconContainer}>
+              <Image
+                style={styles.salaryIcon}
+                source={require("../../../assets/icon/coins_white.png")}
+              />
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.label}>Remuneração</Text>
+              <Text style={styles.value}>{salary} /Mês</Text>
+            </View>
+          </View>
+
+          {/* Seção de Localização com ícone */}
+          <View style={styles.row}>
+            <View style={styles.iconContainer}>
+              <Image
+                style={styles.salaryIcon}
+                source={require("../../../assets/icon/work_white.png")}
+              />
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.label}>Localização</Text>
+              <Text style={styles.value}>{location}</Text>
+            </View>
+          </View>
+
+          <View style={styles.separator} />
+
+          {/* Seção de Descrição do estágio */}
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.descriptionTitle}>Descrição do Estágio</Text>
+            <Text style={styles.descriptionText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
+              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
+              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
+              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+            </Text>
+          </View>
+
+          <View style={styles.buttonGroup}>
+            <Button
+              text="Inscrever-se"
+              onPress={() => {
+                console.log("Inscrição realizada");
+              }}
             />
           </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.label}>Remuneração</Text>
-            <Text style={styles.value}>{salary} /Mês</Text>
-          </View>
         </View>
-
-        {/* Seção de Localização com ícone */}
-        <View style={styles.row}>
-          <View style={styles.iconContainer}>
-            <Image
-              style={styles.salaryIcon}
-              source={require("../../../assets/icon/work_white.png")}
-            />
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.label}>Localização</Text>
-            <Text style={styles.value}>{location}</Text>
-          </View>
-        </View>
-
-        <View style={styles.separator} />
-
-        {/* Seção de Descrição do estágio */}
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Descrição do Estágio</Text>
-          <Text style={styles.descriptionText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque non
-            ligula nec velit consequat gravida ac sit amet lorem. Aenean ut
-            magna sit amet urna facilisis aliquam. Nulla facilisi. Sed tempor
-            eros a tortor ullamcorper, eget fringilla nulla eleifend. Donec
-            bibendum lectus justo, eget elementum nulla tempor sed.
-          </Text>
-        </View>
-
-        <View style={styles.buttonGroup}>
-          <Button
-            text="Inscrever-se"
-            onPress={() => {
-              console.log("Inscrição realizada");
-            }}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </>
   );
 }
@@ -132,12 +164,12 @@ const styles = StyleSheet.create({
   businessName: {
     fontSize: 14,
     fontFamily: "Poppins_400Regular",
-    color: "#333",
+    color: "#000",
   },
   jobTitle: {
     fontSize: 18,
     fontFamily: "Poppins_600SemiBold",
-    color: "#666",
+    color: "#313131",
   },
   logo: {
     width: 88,
@@ -157,11 +189,11 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontFamily: "Poppins_400Regular",
-    color: "#666",
+    color: "#6F6F6F",
   },
   value: {
     fontSize: 16,
-    color: "000000",
+    color: "#000000",
     fontFamily: "Poppins_500Medium",
   },
   descriptionContainer: {
@@ -171,12 +203,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Poppins_500Medium",
     marginBottom: 8,
-    color: "#333",
+    color: "#3D3D3D",
   },
   descriptionText: {
     fontSize: 11,
-    color: "#666",
-    textAlign: "justify",
+    color: "#313131",
+    fontFamily: "Poppins_400Regular",
   },
   salaryIcon: {
     width: 31,

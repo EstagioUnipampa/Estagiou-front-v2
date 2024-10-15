@@ -12,6 +12,7 @@ import Button from "../../components/button/Button";
 import HeaderBack from "../../components/headerBack/HeaderBack";
 import InputText from "../../components/inputText/InputText";
 import ModalAlert from "../../components/modalAlert/ModalAlert";
+import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 
 type RootStackParamList = {
   Home: undefined;
@@ -67,7 +68,7 @@ export default function BusinessLogin({ navigation }: Readonly<Props>) {
   }, []);
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

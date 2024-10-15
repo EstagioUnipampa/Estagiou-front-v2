@@ -6,6 +6,7 @@ import StudentDocuments from "../../pages/student_documents/StudentDocuments";
 import StudentHome from "../../pages/student_home/StudentHome";
 import StudentProfile from "../../pages/student_profile/StudentProfile";
 import StudentRegistrations from "../../pages/student_registrations/StudentRegistrations";
+import LoadingIcon from "../loadingIcon/LoadingIcon";
 import InternshipDetails from "../../pages/intership_details/IntershipDetails";
 
 const Tab = createBottomTabNavigator();
@@ -56,7 +57,7 @@ export default function BottomTab() {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

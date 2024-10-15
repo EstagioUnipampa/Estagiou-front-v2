@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { useAppFonts } from "../../../hooks/useAppFonts";
+import LoadingIcon from "../../../components/loadingIcon/LoadingIcon";
 
 interface CardProps {
   source: any;
@@ -11,7 +12,7 @@ export default function Card({ source, number, text }: Readonly<CardProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

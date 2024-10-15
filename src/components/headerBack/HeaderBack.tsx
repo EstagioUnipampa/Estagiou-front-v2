@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
+import LoadingIcon from "../loadingIcon/LoadingIcon";
 
 interface HeaderProps {
   title: string;
@@ -19,7 +20,7 @@ export default function HeaderBack({ title, onPress }: Readonly<HeaderProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

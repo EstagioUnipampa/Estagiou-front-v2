@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
+import LoadingIcon from "../loadingIcon/LoadingIcon";
 
 interface ModalAlertProps {
   value: boolean;
@@ -23,7 +24,7 @@ export default function ModalAlert({
 }: Readonly<ModalAlertProps>) {
   const fontsLoaded = useAppFonts();
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

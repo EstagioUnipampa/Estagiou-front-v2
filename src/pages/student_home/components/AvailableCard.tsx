@@ -1,4 +1,4 @@
-import { View, Image, Text, StyleSheet, ImageProps } from "react-native";
+import { View, Image, Text, StyleSheet, ImageProps, TouchableOpacity } from "react-native";
 import IconText from "../../../components/iconText/IconText";
 
 interface AvailableCardProps {
@@ -7,6 +7,7 @@ interface AvailableCardProps {
   salary: string;
   location: string;
   source: ImageProps;
+  onPress: () => void;
 }
 
 export default function AvailableCard({
@@ -15,9 +16,10 @@ export default function AvailableCard({
   salary,
   location,
   source,
+  onPress,
 }: Readonly<AvailableCardProps>) {
   return (
-    <View style={styles.availableWorkCard}>
+    <TouchableOpacity style={styles.availableWorkCard} onPress={onPress}>
       <Image style={styles.availableWorkCardImage} source={source} />
       <View style={styles.availableWorkCardDescription}>
         <Text style={styles.availableWorkCardBusinessName}>{businessName}</Text>
@@ -33,7 +35,7 @@ export default function AvailableCard({
           />
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

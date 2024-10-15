@@ -19,8 +19,24 @@ import RecommendedCard from "./components/RecommendedCard";
 import React from "react";
 import { useSharedValue } from "react-native-reanimated";
 import AvailableCard from "./components/AvailableCard";
+import { StackNavigationProp } from "@react-navigation/stack";
+import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 
-export default function StudentHome() {
+type RootStackParamList = {
+  DetailsJobVacancy: { businessName: string; jobTitle: string; logo: any, salary: string, location: string };
+  StudentHome: undefined;
+};
+
+type HomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "StudentHome"
+>;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
+
+export default function StudentHome({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
   const data = [...new Array(5).keys()];
   const progress = useSharedValue<number>(0);
@@ -39,7 +55,7 @@ export default function StudentHome() {
   };
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (
@@ -131,24 +147,52 @@ export default function StudentHome() {
 
       <View style={styles.availableWorksContainer}>
         <AvailableCard
+          onPress={() =>
+            navigation.navigate("DetailsJobVacancy", {
+              businessName: "Nome Empresa",
+              jobTitle: "Desenvolvimento de Sistemas",
+              salary: "R$ 750,00",
+              location: "São Paulo, Brasil",
+              logo: require("../../../assets/images/companyLogo2.png"),
+            })
+          }
           businessName="Nome Empresa"
           title="Desenvolvimento de Sistemas"
-          salary="R$740,00"
+          salary="R$750,00"
           location="São Paulo, Brasil"
           source={require("../../../assets/images/companyLogo2.png")}
         />
+
         <AvailableCard
-          businessName="Nome Empresa"
-          title="Desenvolvimento de Sistemas"
-          salary="R$740,00"
-          location="São Paulo, Brasil"
+          onPress={() =>
+            navigation.navigate("DetailsJobVacancy", {
+              businessName: "Nome Empresa2",
+              jobTitle: "Programador",
+              salary: "R$350,00",
+              location: "Uruguaiana, Brasil",
+              logo: require("../../../assets/images/companyLogo2.png"),
+            })
+          }
+          businessName="Nome Empresa2"
+          title="Programador"
+          salary="R$350,00"
+          location="Uruguaiana, Brasil"
           source={require("../../../assets/images/companyLogo2.png")}
         />
         <AvailableCard
+          onPress={() =>
+            navigation.navigate("DetailsJobVacancy", {
+              businessName: "Nome Empresa3",
+              jobTitle: "Assistente de TI",
+              salary: "R$640,00",
+              location: "Porto Alegre, Brasil",
+              logo: require("../../../assets/images/companyLogo2.png"),
+            })
+          }
           businessName="Nome Empresa"
-          title="Desenvolvimento de Sistemas"
-          salary="R$740,00"
-          location="São Paulo, Brasil"
+          title="Assistente de TI"
+          salary="R$640,00"
+          location="Porto Alegre, Brasil"
           source={require("../../../assets/images/companyLogo2.png")}
         />
       </View>

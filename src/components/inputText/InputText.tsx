@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
+import LoadingIcon from "../loadingIcon/LoadingIcon";
 
 interface InputTextProps {
   placeholder: string;
@@ -27,7 +28,7 @@ export default function InputText({
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

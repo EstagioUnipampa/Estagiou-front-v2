@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import Card from "./components/Card";
+import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 
 type RootStackParamList = {
   Home: undefined;
@@ -20,7 +21,7 @@ export default function Home({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

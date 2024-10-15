@@ -18,11 +18,10 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, course }) => {
 const styles = StyleSheet.create({
   infoContainer: {
     position: 'absolute',
-    top: 200,
+    top: 180,
     left: 0,
     right: 0,
     alignItems: 'center',
-    marginTop: 30,
   },
   userName: {
     fontSize: 20,

@@ -15,13 +15,12 @@ const ContactInfo: React.FC = () => {
 const styles = StyleSheet.create({
   contactContainer: {
     position: 'absolute',
-    top: 300,
+    top: 280,
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
   },
   spaceBetweenIcons: {
     width: 20,

@@ -15,11 +15,10 @@ const ProfilePic: React.FC = () => {
 const styles = StyleSheet.create({
   avatarContainer: {
     position: 'absolute',
-    top: 90,
+    top: 70,
     left: 0,
     right: 0,
     alignItems: 'center',
-    marginTop: 40,
   },
   avatar: {
     width: 90,

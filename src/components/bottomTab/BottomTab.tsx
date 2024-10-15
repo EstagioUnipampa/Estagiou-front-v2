@@ -4,8 +4,9 @@ import { Image, ImageSourcePropType, Text } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import StudentDocuments from "../../pages/student_documents/StudentDocuments";
 import StudentHome from "../../pages/student_home/StudentHome";
-import StudentProfile from "../../pages/student_profile/StudentRegistrations";
+import StudentProfile from "../../pages/student_profile/StudentProfile";
 import StudentRegistrations from "../../pages/student_registrations/StudentRegistrations";
+import InternshipDetails from "../../pages/intership_details/IntershipDetails";
 
 const Tab = createBottomTabNavigator();
 
@@ -106,7 +107,7 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Inscrições"
-        component={StudentRegistrations}
+        component={InternshipDetails}
         options={{
           tabBarIcon: InscricoesTabIcon,
         }}

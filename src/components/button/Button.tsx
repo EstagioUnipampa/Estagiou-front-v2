@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
+import LoadingIcon from "../loadingIcon/LoadingIcon";
 
 interface ButtonProps {
   text: string;
@@ -11,7 +12,7 @@ export default function Button({ text, onPress }: Readonly<ButtonProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

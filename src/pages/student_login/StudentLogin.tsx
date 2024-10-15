@@ -13,6 +13,7 @@ import HeaderBack from "../../components/headerBack/HeaderBack";
 import InputText from "../../components/inputText/InputText";
 import ModalAlert from "../../components/modalAlert/ModalAlert";
 import OptionText from "../../components/optionText/OptionText";
+import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 
 type RootStackParamList = {
   Home: undefined;
@@ -72,7 +73,7 @@ export default function StudentLogin({ navigation }: Readonly<Props>) {
   }, []);
 
   if (!fontsLoaded) {
-    return <Text>Carregando...</Text>;
+    return <LoadingIcon />;
   }
 
   return (

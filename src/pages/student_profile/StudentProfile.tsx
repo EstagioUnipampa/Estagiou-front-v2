@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import AppBar from './components/AppBar';
-import ProfilePic from './components/ProfilePic';
-import ProfileInfo from './components/ProfileInfo';
-import ContactOptions from './components/ContactInfo';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import AppBar from "./components/AppBar";
+import ProfilePic from "./components/ProfilePic";
+import ProfileInfo from "./components/ProfileInfo";
+import ContactOptions from "./components/ContactInfo";
 
 const StudentProfile = () => {
   return (
@@ -22,20 +22,20 @@ const StudentProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF', 
+    backgroundColor: "#FBF6FF",
   },
   bodyContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   topBackground: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    height: 120, 
-    backgroundColor: "#23A331", 
+    height: 120,
+    backgroundColor: "#23A331",
   },
 });
 

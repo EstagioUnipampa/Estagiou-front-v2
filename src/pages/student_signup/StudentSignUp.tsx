@@ -47,12 +47,35 @@ export default function StudentSignUp({ navigation }: Readonly<Props>) {
     setShowPassword(!showPassword);
   }
 
-  function handleSignUp() {
-    console.log("DADOS QUE SERÃO ENVIADOS: ");
-    console.log("Email: ", email);
-    console.log("Senha: ", password);
-    console.log("Nome: ", name);
-    console.log("Sobrenome: ", lastName);
+  async function handleSignUp() {
+    const body = {
+      name: name,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+
+    fetch("http://10.0.2.2:8080/v1/student/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("Cadastro realizado com sucesso!");
+          navigation.navigate("StudentLogin");
+        } else {
+          return response.json().then((error) => {
+            throw new Error(error.message || "Erro ao cadastrar");
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Erro no cadastro: ", error);
+        alert("Erro no cadastro: " + error.message);
+      });
   }
 
   useEffect(() => {
@@ -114,7 +137,7 @@ export default function StudentSignUp({ navigation }: Readonly<Props>) {
               ></InputText>
             </View>
             <View style={styles.buttonGroup}>
-              <Button text="Login" onPress={handleSignUp} />
+              <Button text="Cadastrar" onPress={handleSignUp} />
               <OptionText
                 text="Já possui conta? Faça login"
                 onPress={() => navigation.navigate("StudentLogin")}

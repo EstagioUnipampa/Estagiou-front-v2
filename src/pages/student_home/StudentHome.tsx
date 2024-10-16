@@ -16,14 +16,21 @@ import SearchInput from "../../components/searchInput/SearchInput";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import Card from "./components/Card";
 import RecommendedCard from "./components/RecommendedCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSharedValue } from "react-native-reanimated";
 import AvailableCard from "./components/AvailableCard";
 import { StackNavigationProp } from "@react-navigation/stack";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
+import * as SecureStore from "expo-secure-store";
 
 type RootStackParamList = {
-  DetailsJobVacancy: { businessName: string; jobTitle: string; logo: any, salary: string, location: string };
+  DetailsJobVacancy: {
+    businessName: string;
+    jobTitle: string;
+    logo: any;
+    salary: string;
+    location: string;
+  };
   StudentHome: undefined;
 };
 
@@ -54,6 +61,47 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
     });
   };
 
+  const [userData, setUserData] = useState({
+    name: "",
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const secureId = await SecureStore.getItemAsync("secure_id");
+        const secureToken = await SecureStore.getItemAsync("secure_token");
+
+        const response = await fetch(
+          `http://10.0.2.2:8080/v1/student/${secureId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${secureToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData({
+            name: data.name,
+          });
+        } else {
+          console.log("Erro ao buscar dados do usuário");
+        }
+      } catch (error) {
+        console.error("Erro: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   if (!fontsLoaded) {
     return <LoadingIcon />;
   }
@@ -64,7 +112,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         <View style={styles.containerHeader}>
           <View style={styles.containerHeaderText}>
             <Text style={styles.welcome}>Bem-vindo</Text>
-            <Text style={styles.name}>Henry Kanwil</Text>
+            <Text style={styles.name}>{userData.name}</Text>
           </View>
 
           <Image

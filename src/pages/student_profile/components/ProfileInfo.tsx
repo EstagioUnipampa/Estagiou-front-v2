@@ -3,14 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 
 interface ProfileInfoProps {
   name: string;
-  course: string;
+  email: string;
 }
 
-const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, course }) => {
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, email }) => {
   return (
     <View style={styles.infoContainer}>
       <Text style={styles.userName}>{name}</Text>
-      <Text style={styles.userCourse}>{course}</Text>
+      <Text style={styles.userEmail}>{email}</Text>
     </View>
   );
 };
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  userCourse: {
+  userEmail: {
     fontSize: 16,
     textAlign: 'center',
   },

@@ -45,8 +45,26 @@ type Props = {
 
 export default function StudentHome({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
-  const data = [...new Array(5).keys()];
   const progress = useSharedValue<number>(0);
+
+  type JobVacancy = {
+    title: string;
+    salary: string;
+    modality: string;
+  };
+
+  type JobVacancyList = {
+    id: string;
+    title: string;
+    salary: string;
+    modality: string;
+    company: {
+      name: string;
+    };
+  };
+
+  const [data, setData] = useState<JobVacancy[]>([]);
+  const [dataList, setDataList] = useState<JobVacancyList[]>([]);
 
   const ref = React.useRef<ICarouselInstance>(null);
 
@@ -61,6 +79,41 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
     });
   };
 
+  useEffect(() => {
+    const fetchJobVacancies = async () => {
+      try {
+        const secureToken = await SecureStore.getItemAsync("secure_token");
+
+        const response = await fetch(
+          `http://10.0.2.2:8080/v1/jobvacancy/list`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${secureToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          const firstFive = data.slice(0, 5);
+
+          setData(firstFive);
+          setDataList(data);
+        } else {
+          console.log("Erro ao buscar dados do usuário");
+        }
+      } catch (error) {
+        console.error("Erro: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobVacancies();
+  }, []);
+
   const [userData, setUserData] = useState({
     name: "",
     enrollmentsCount: 0,
@@ -71,7 +124,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-
         const secureToken = await SecureStore.getItemAsync("secure_token");
 
         const response = await fetch(
@@ -179,11 +231,13 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         data={data}
         renderItem={({ index }) => (
           <RecommendedCard
-            title="Desenvolvedor Fullstack"
-            location="São Paulo, SP"
-            salary="R$ 3.000,00"
+            onPress={() =>
+              console.log("Clicou na vaga recomendada", data[index])
+            }
             source={require("../../../assets/images/companyLogo1.png")}
-            onPress={() => console.log(index)}
+            title={data[index].title}
+            salary={`R$ ${data[index].salary}`}
+            location={data[index].modality}
           />
         )}
       />
@@ -196,55 +250,17 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
       </View>
 
       <View style={styles.availableWorksContainer}>
-        <AvailableCard
-          onPress={() =>
-            navigation.navigate("DetailsJobVacancy", {
-              businessName: "Nome Empresa",
-              jobTitle: "Desenvolvimento de Sistemas",
-              salary: "R$ 750,00",
-              location: "São Paulo, Brasil",
-              logo: require("../../../assets/images/companyLogo2.png"),
-            })
-          }
-          businessName="Nome Empresa"
-          title="Desenvolvimento de Sistemas"
-          salary="R$750,00"
-          location="São Paulo, Brasil"
-          source={require("../../../assets/images/companyLogo2.png")}
-        />
-
-        <AvailableCard
-          onPress={() =>
-            navigation.navigate("DetailsJobVacancy", {
-              businessName: "Nome Empresa2",
-              jobTitle: "Programador",
-              salary: "R$350,00",
-              location: "Uruguaiana, Brasil",
-              logo: require("../../../assets/images/companyLogo2.png"),
-            })
-          }
-          businessName="Nome Empresa2"
-          title="Programador"
-          salary="R$350,00"
-          location="Uruguaiana, Brasil"
-          source={require("../../../assets/images/companyLogo2.png")}
-        />
-        <AvailableCard
-          onPress={() =>
-            navigation.navigate("DetailsJobVacancy", {
-              businessName: "Nome Empresa3",
-              jobTitle: "Assistente de TI",
-              salary: "R$640,00",
-              location: "Porto Alegre, Brasil",
-              logo: require("../../../assets/images/companyLogo2.png"),
-            })
-          }
-          businessName="Nome Empresa"
-          title="Assistente de TI"
-          salary="R$640,00"
-          location="Porto Alegre, Brasil"
-          source={require("../../../assets/images/companyLogo2.png")}
-        />
+        {dataList.map((item) => (
+          <AvailableCard
+            key={item.id}
+            onPress={() => console.log("clicou")}
+            businessName={item.company.name}
+            title={item.title}
+            salary={`R$ ${item.salary}`}
+            location={item.modality}
+            source={require("../../../assets/images/companyLogo2.png")}
+          ></AvailableCard>
+        ))}
       </View>
     </ScrollView>
   );

@@ -70,11 +70,11 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const secureId = await SecureStore.getItemAsync("secure_id");
+
         const secureToken = await SecureStore.getItemAsync("secure_token");
 
         const response = await fetch(
-          `http://10.0.2.2:8080/v1/student/${secureId}`,
+          `http://10.0.2.2:8080/v1/student/profile`,
           {
             method: "GET",
             headers: {

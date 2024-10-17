@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     textAlign: 'center', 
     marginTop: 40,
+    marginLeft: 27,
   },
   ellipsisContainer: {
     marginTop: 40,

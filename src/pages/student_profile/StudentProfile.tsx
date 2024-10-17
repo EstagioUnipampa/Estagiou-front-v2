@@ -5,6 +5,7 @@ import ProfilePic from "./components/ProfilePic";
 import ProfileInfo from "./components/ProfileInfo";
 import ContactOptions from "./components/ContactInfo";
 import * as SecureStore from "expo-secure-store";
+import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 
 const StudentProfile = () => {
   const [userData, setUserData] = useState({
@@ -17,11 +18,10 @@ const StudentProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const secureId = await SecureStore.getItemAsync("secure_id");
         const secureToken = await SecureStore.getItemAsync("secure_token");
 
         const response = await fetch(
-          `http://10.0.2.2:8080/v1/student/${secureId}`,
+          `http://10.0.2.2:8080/v1/student/profile`,
           {
             method: "GET",
             headers: {
@@ -52,8 +52,8 @@ const StudentProfile = () => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-      <Text>Carregando...</Text>
+      <View>
+      <LoadingIcon/>
       </View>
     );
   }
@@ -89,12 +89,6 @@ const styles = StyleSheet.create({
     height: 120,
     backgroundColor: "#23A331",
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
 });
 
 export default StudentProfile;

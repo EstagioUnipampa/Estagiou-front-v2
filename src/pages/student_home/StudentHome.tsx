@@ -63,6 +63,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
 
   const [userData, setUserData] = useState({
     name: "",
+    enrollmentsCount: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -88,6 +89,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
           const data = await response.json();
           setUserData({
             name: data.name,
+            enrollmentsCount: data.enrollments.length,
           });
         } else {
           console.log("Erro ao buscar dados do usuário");
@@ -128,7 +130,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         </View>
       </SafeAreaView>
       <Card
-        number={29}
+        number={userData.enrollmentsCount}
         text="Incrições"
         source={require("../../../assets/images/confirmed.png")}
       />

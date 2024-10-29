@@ -3,11 +3,10 @@ import React from "react";
 import { Image, ImageSourcePropType } from "react-native";
 import { useAppFonts } from "../../hooks/useAppFonts";
 import StudentDocuments from "../../pages/student_documents/StudentDocuments";
-import StudentHome from "../../pages/student_home/StudentHome";
-import StudentProfile from "../../pages/student_profile/StudentProfile";
 import StudentRegistrations from "../../pages/student_subscribes/StudentSubscribes";
 import LoadingIcon from "../loadingIcon/LoadingIcon";
 import BusinessHome from "../../pages/business_home/BusinessHome";
+import BusinessProfile from "../../pages/business_profile/BusinessProfile";
 // import InternshipDetails from "../../pages/intership_details/IntershipDetails";
 
 const Tab = createBottomTabNavigator();
@@ -116,7 +115,7 @@ export default function BottomTabBusiness() {
       />
       <Tab.Screen
         name="Perfil"
-        component={StudentProfile}
+        component={BusinessProfile}
         options={{
           tabBarIcon: PerfilTabIcon,
         }}

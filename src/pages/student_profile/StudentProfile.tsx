@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Linking } from "react-native";
 import AppBar from "./components/AppBar";
 import ProfilePic from "./components/ProfilePic";
-import ProfileInfo from "./components/ProfileInfo";
-import ContactOptions from "./components/ContactInfo";
 import * as SecureStore from "expo-secure-store";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
+import Button from "../../components/button/Button";
+import ModalAlert from "../../components/modalAlert/ModalAlert";
+import ProfileInfo from "./components/ProfileInfo";
 
 const StudentProfile = () => {
   const [userData, setUserData] = useState({
     name: "",
+    lastName: "",
+    course: "",
     email: "",
   });
 
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
-
         const response = await fetch(
           `http://10.0.2.2:8080/v1/student/profile`,
           {
@@ -34,8 +37,10 @@ const StudentProfile = () => {
         if (response.ok) {
           const data = await response.json();
           setUserData({
-            name: data.name,
-            email: data.email,
+            name: data.name || "",
+            lastName: data.lastName || "",
+            course: data.course || "",
+            email: data.email || "",
           });
         } else {
           console.log("Erro ao buscar dados do usuário");
@@ -50,10 +55,18 @@ const StudentProfile = () => {
     fetchUserData();
   }, []);
 
+  const handleOpenInternshipInfo = () => {
+    Linking.openURL("https://sites.unipampa.edu.br/estagios/");
+  };
+
+  const handleHelp = () => {
+    setModalVisible(true);
+  };
+
   if (loading) {
     return (
       <View>
-      <LoadingIcon/>
+        <LoadingIcon />
       </View>
     );
   }
@@ -64,9 +77,26 @@ const StudentProfile = () => {
       <View style={styles.bodyContainer}>
         <View style={styles.topBackground} />
         <ProfilePic />
-        <ProfileInfo name={userData.name} email={userData.email} />
-        <ContactOptions />
+        <ProfileInfo
+          name={userData.name}
+          lastName={userData.lastName}
+          email={userData.email}
+        />
+
+        <View style={styles.buttonContainer}>
+          <Button
+            text="Informações sobre Estágios"
+            onPress={handleOpenInternshipInfo}
+          />
+          <Button text="Ajuda" onPress={handleHelp} />
+        </View>
       </View>
+      <ModalAlert
+        value={modalVisible}
+        setValue={setModalVisible}
+        title="Ajuda"
+        description="Para mais informações, entre em contato com o administrador."
+      />
     </View>
   );
 };
@@ -88,6 +118,12 @@ const styles = StyleSheet.create({
     right: 0,
     height: 120,
     backgroundColor: "#23A331",
+  },
+  buttonContainer: {
+    width: "80%",
+    marginTop: 600,
+    alignItems: "center",
+    gap: 20,
   },
 });
 

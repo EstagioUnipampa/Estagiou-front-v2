@@ -13,10 +13,12 @@ import HeaderBack from "../../components/headerBack/HeaderBack";
 import InputText from "../../components/inputText/InputText";
 import ModalAlert from "../../components/modalAlert/ModalAlert";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
+import * as SecureStore from "expo-secure-store";
 
 type RootStackParamList = {
   Home: undefined;
   BusinessLogin: undefined;
+  BottomTabBusiness: undefined;
 };
 
 type StudentLoginScreenNavigationProp = StackNavigationProp<
@@ -35,12 +37,37 @@ export default function BusinessLogin({ navigation }: Readonly<Props>) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
 
   function onPress() {
-    console.log("DADOS QUE SERÃO ENVIADOS: ");
-    console.log("Email: ", email);
-    console.log("Senha: ", senha);
+    const body = {
+      email: email,
+      password: password,
+    };
+
+    fetch("http://10.0.2.2:8080/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then(async (data) => {
+        if (data.token) {
+          await SecureStore.setItemAsync("secure_token", data.token);
+          await SecureStore.setItemAsync("secure_id", data.id);
+
+          navigation.navigate("BottomTabBusiness");
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   }
 
   function handleShowPassword() {
@@ -87,7 +114,7 @@ export default function BusinessLogin({ navigation }: Readonly<Props>) {
             <InputText
               placeholder="Senha"
               secureTextEntry={showPassword}
-              onChange={setSenha}
+              onChange={setPassword}
               inputPassword={true}
               handleShowPassword={handleShowPassword}
             ></InputText>

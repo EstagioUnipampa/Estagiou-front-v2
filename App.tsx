@@ -5,6 +5,7 @@ import Home from "./src/pages/home/Home";
 import StudentLogin from "./src/pages/student_login/StudentLogin";
 import StudentRegister from "./src/pages/student_signup/StudentSignUp";
 import BottomTab from "./src/components/bottomTab/BottomTab";
+import BottomTabBusiness from "./src/components/bottomTabBusiness/BottomTabBusiness";
 import DetailsJobVacancy from "./src/pages/details_job_vacancy/DetailsJobVacancy";
 import StudentHome from "./src/pages/student_home/StudentHome";
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="DetailsJobVacancy" component={DetailsJobVacancy} />
 
         <Stack.Screen name="BottomTab" component={BottomTab} />
+        <Stack.Screen name="BottomTabBusiness" component={BottomTabBusiness} />
       </Stack.Navigator>
     </NavigationContainer>
   );

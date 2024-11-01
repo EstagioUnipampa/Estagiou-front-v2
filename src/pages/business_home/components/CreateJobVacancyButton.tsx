@@ -2,12 +2,15 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useAppFonts } from "../../../hooks/useAppFonts";
 import LoadingIcon from "../../../components/loadingIcon/LoadingIcon";
 
+
 interface CreateJobVacancyButtonProps {
   text: string;
+  onPress: () => void; 
 }
 
 export default function CreateJobVacancyButton({
   text,
+  onPress, 
 }: Readonly<CreateJobVacancyButtonProps>) {
   const fontsLoaded = useAppFonts();
 
@@ -16,7 +19,7 @@ export default function CreateJobVacancyButton({
   }
 
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
       <Image
         style={styles.image}
         source={require("../../../../assets/icon/plus.png")}

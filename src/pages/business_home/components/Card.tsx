@@ -1,14 +1,16 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useAppFonts } from "../../../hooks/useAppFonts";
 import LoadingIcon from "../../../components/loadingIcon/LoadingIcon";
+import { useNavigation } from "@react-navigation/native";
 
 interface CardProps {
   source: any;
   number: number;
   text: string;
+  onPress: () => void;
 }
 
-export default function Card({ source, number, text }: Readonly<CardProps>) {
+export default function Card({ source, number, text, onPress }: Readonly<CardProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
@@ -16,13 +18,15 @@ export default function Card({ source, number, text }: Readonly<CardProps>) {
   }
 
   return (
-    <View style={styles.registrations}>
-      <View style={styles.containerText}>
-        <Text style={styles.numberRegistrations}>{number}</Text>
-        <Text style={styles.textRegistrations}>{text}</Text>
+    <TouchableOpacity>
+      <View style={styles.registrations}>
+        <View style={styles.containerText}>
+          <Text style={styles.numberRegistrations}>{number}</Text>
+          <Text style={styles.textRegistrations}>{text}</Text>
+        </View>
+        <Image style={styles.confirmedImage} source={source} />
       </View>
-      <Image style={styles.confirmedImage} source={source} />
-    </View>
+    </TouchableOpacity>
   );
 }
 

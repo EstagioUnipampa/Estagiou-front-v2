@@ -9,6 +9,7 @@ import BottomTabBusiness from "./src/components/bottomTabBusiness/BottomTabBusin
 import DetailsJobVacancy from "./src/pages/details_job_vacancy/DetailsJobVacancy";
 import StudentHome from "./src/pages/student_home/StudentHome";
 import BusinessVacancyCreation from "./src/pages/business_vacancy_creation/BusinessVacancyCreation";
+import BusinessHome from "./src/pages/business_home/BusinessHome";
 
 const Stack = createStackNavigator();
 
@@ -19,9 +20,13 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="StudentLogin" component={StudentLogin} />
         <Stack.Screen name="StudentRegister" component={StudentRegister} />
+        <Stack.Screen name="BusinessHome" component={BusinessHome} />
         <Stack.Screen name="BusinessLogin" component={BusinessLogin} />
         <Stack.Screen name="DetailsJobVacancy" component={DetailsJobVacancy} />
-        <Stack.Screen name="BusinessVacancyCreation" component={BusinessVacancyCreation} />
+        <Stack.Screen
+          name="BusinessVacancyCreation"
+          component={BusinessVacancyCreation}
+        />
 
         <Stack.Screen name="BottomTab" component={BottomTab} />
         <Stack.Screen name="BottomTabBusiness" component={BottomTabBusiness} />

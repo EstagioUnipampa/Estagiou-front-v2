@@ -15,7 +15,7 @@ import InputText from "../../components/inputText/InputText";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 import CreateJobVacancyButtonProps from "../business_home/components/CreateJobVacancyButton";
 import DocumentsUpload from "./components/DocumentsUpload";
-import { Picker } from '@react-native-picker/picker';
+import { Picker } from "@react-native-picker/picker";
 
 type RootStackParamList = {
   BusinessVacancyCreation: undefined;
@@ -36,7 +36,7 @@ export default function BusinessVacancyCreation({
 }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [location, setLocation] = useState("Presencial"); 
+  const [location, setLocation] = useState("Presencial");
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -69,10 +69,7 @@ export default function BusinessVacancyCreation({
       keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <HeaderBack
-          title="Criar Nova Vaga"
-          onPress={() => navigation.navigate("BusinessHome")}
-        />
+        <HeaderBack title="Criar Nova Vaga" onPress={() => navigation.pop()} />
         <View style={styles.content}>
           <View style={styles.textContent}>
             <Text style={styles.titleText}>
@@ -83,10 +80,10 @@ export default function BusinessVacancyCreation({
             <View style={styles.formFields}>
               <Text style={styles.inputTitle}>Nome da Vaga</Text>
               <InputText placeholder="" onChange={() => {}} />
-              
+
               <Text style={styles.inputTitle}>Remuneração</Text>
               <InputText placeholder="" onChange={() => {}} />
-              
+
               <Text style={styles.inputTitle}>Localização</Text>
               <View style={styles.pickerContainer}>
                 <Picker
@@ -158,15 +155,15 @@ const styles = StyleSheet.create({
   pickerContainer: {
     borderColor: "#1A7924",
     backgroundColor: "white",
-    height: 64, 
+    height: 64,
     borderWidth: 1,
     borderRadius: 50,
     paddingRight: 29,
-    overflow: "hidden", 
+    overflow: "hidden",
   },
   picker: {
-    height: "100%", 
-    width: '100%', 
-    backgroundColor: 'transparent', 
+    height: "100%",
+    width: "100%",
+    backgroundColor: "transparent",
   },
 });

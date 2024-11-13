@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native";
+import * as SecureStore from "expo-secure-store";
 import AppBar from "./components/AppBar";
 import ProfilePic from "./components/ProfilePic";
-import * as SecureStore from "expo-secure-store";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
-import Button from "../../components/button/Button";
-import ModalAlert from "../../components/modalAlert/ModalAlert";
 import ProfileInfo from "./components/ProfileInfo";
+import ModalAlert from "../../components/modalAlert/ModalAlert";
+
+interface UserData {
+  id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  courseName: string;
+  skills: string[];
+}
 
 const StudentProfile = () => {
-  const [userData, setUserData] = useState({
-    name: "",
-    lastName: "",
-    course: "",
-    email: "",
-  });
-
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -35,13 +45,8 @@ const StudentProfile = () => {
         );
 
         if (response.ok) {
-          const data = await response.json();
-          setUserData({
-            name: data.name || "",
-            lastName: data.lastName || "",
-            course: data.course || "",
-            email: data.email || "",
-          });
+          const data: UserData = await response.json();
+          setUserData(data);
         } else {
           console.log("Erro ao buscar dados do usuário");
         }
@@ -55,19 +60,39 @@ const StudentProfile = () => {
     fetchUserData();
   }, []);
 
-  const handleOpenInternshipInfo = () => {
-    Linking.openURL("https://sites.unipampa.edu.br/estagios/");
-  };
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
 
-  const handleHelp = () => {
-    setModalVisible(true);
-  };
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   if (loading) {
     return (
-      <View>
+      <View style={styles.loadingContainer}>
         <LoadingIcon />
       </View>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <Text style={styles.errorText}>
+        Erro ao carregar os dados do usuário.
+      </Text>
     );
   }
 
@@ -76,27 +101,46 @@ const StudentProfile = () => {
       <AppBar />
       <View style={styles.bodyContainer}>
         <View style={styles.topBackground} />
-        <ProfilePic />
-        <ProfileInfo
-          name={userData.name}
-          lastName={userData.lastName}
-          email={userData.email}
-        />
-
-        <View style={styles.buttonContainer}>
-          <Button
-            text="Informações sobre Estágios"
-            onPress={handleOpenInternshipInfo}
+        {/* Foto de Perfil e Informações */}
+        <View style={styles.profileContainer}>
+          <ProfilePic />
+          <ProfileInfo
+            name={userData.name}
+            lastName={userData.lastName}
+            email={userData.email}
+            course={userData.courseName}
           />
-          <Button text="Ajuda" onPress={handleHelp} />
         </View>
+
+        {/* Título e Lista de Skills */}
+        <Text style={styles.title}>Minhas Skills</Text>
+        <FlatList
+          data={userData.skills}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Text style={styles.skillItem}>{item}</Text>
+          )}
+        />
       </View>
-      <ModalAlert
-        value={modalVisible}
-        setValue={setModalVisible}
-        title="Ajuda"
-        description="Para mais informações, entre em contato com o administrador."
-      />
+      {!keyboardVisible && (
+        <ModalAlert
+          value={modalVisible}
+          setValue={setModalVisible}
+          title="Econtrou algum problema?"
+          description="Entre em contato com o suporte em email@email.com"
+        />
+      )}
+      {!keyboardVisible && (
+        <View style={styles.containerQuestion}>
+          <TouchableOpacity
+            style={styles.containerQuestionButton}
+            activeOpacity={0.7}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.questionButton}>?</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -106,10 +150,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FBF6FF",
   },
-  bodyContainer: {
+  loadingContainer: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  bodyContainer: {
+    padding: 20,
   },
   topBackground: {
     position: "absolute",
@@ -119,11 +166,48 @@ const styles = StyleSheet.create({
     height: 120,
     backgroundColor: "#23A331",
   },
-  buttonContainer: {
-    width: "80%",
-    marginTop: 600,
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center", // Alinha a foto e as informações do perfil
+    marginBottom: 250, // Adiciona espaçamento entre o perfil e a seção de skills
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginVertical: 10,
+  },
+  skillItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#1A7924",
+    alignSelf: "flex-start",
+    backgroundColor: "#FFFFFF",
+    marginTop: 10,
+  },
+  errorText: {
+    textAlign: "center",
+    color: "red",
+    marginTop: 20,
+  },
+  containerQuestionButton: {
+    backgroundColor: "#23A331",
+    borderRadius: 50,
+    justifyContent: "center",
     alignItems: "center",
-    gap: 20,
+    height: 55,
+    width: 55,
+  },
+  questionButton: {
+    color: "white",
+    fontSize: 36,
+    fontFamily: "Poppins_600SemiBold",
+  },
+  containerQuestion: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    padding: 20,
   },
 });
 

@@ -5,15 +5,22 @@ interface ProfileInfoProps {
   name: string;
   lastName: string;
   email: string;
+  course: string;
 }
 
-const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, lastName, email }) => {
+const ProfileInfo: React.FC<ProfileInfoProps> = ({
+  name,
+  lastName,
+  email,
+  course,
+}) => {
   return (
     <View style={styles.infoContainer}>
       <View style={styles.nameContainer}>
         <Text style={styles.userName}>{name}</Text>
         <Text style={styles.userLastName}>{lastName}</Text>
       </View>
+      <Text style={styles.userCourse}>{course}</Text>
       <Text style={styles.userEmail}>{email}</Text>
     </View>
   );
@@ -42,6 +49,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   userEmail: {
+    fontSize: 16,
+    textAlign: "center",
+  },
+  userCourse: {
     fontSize: 16,
     textAlign: "center",
   },

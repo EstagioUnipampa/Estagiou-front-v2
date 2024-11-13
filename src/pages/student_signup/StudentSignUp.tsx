@@ -254,7 +254,7 @@ export default function StudentSignUp({ navigation }: Readonly<Props>) {
                     <Text
                       style={[
                         styles.skillText,
-                        skills.includes(skill.label) &&
+                        skills.includes(skill.value) &&
                           styles.skillTextSelected,
                       ]}
                     >
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
     color: "#1A7924",
   },
   skillTextSelected: {
-    color: "red",
+    color: "#FFFFFF",
   },
   ContainerSkill: {
     flexDirection: "row",

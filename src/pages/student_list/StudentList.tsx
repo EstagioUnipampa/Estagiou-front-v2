@@ -12,6 +12,7 @@ import * as SecureStore from "expo-secure-store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import HeaderBack from "../../components/headerBack/HeaderBack";
+import { FlatList } from "react-native-reanimated/lib/typescript/Animated";
 
 type RootStackParamList = {
   StudentList: { vacancyId: string };
@@ -35,6 +36,7 @@ type Student = {
   lastName: string;
   courseName: string;
   status: string;
+  skills: string[];
 };
 
 const StudentList: React.FC<Props> = ({ navigation }) => {
@@ -111,6 +113,9 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
                 <Text style={styles.email}>{item.email}</Text>
                 <Text style={styles.course}>{`Curso: ${item.courseName}`}</Text>
                 <Text style={styles.course}>{`Status: ${item.status ?? "Pendente"}`}</Text>
+                <Text style={styles.skills}>{`Habilidades: ${item.skills.join(
+                  ", "
+                )}`}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -153,6 +158,11 @@ const styles = StyleSheet.create({
   course: {
     fontSize: 14,
     color: "#444",
+  },
+  skills: {
+    fontSize: 14,
+    color: "#444",
+    marginTop: 5,
   },
 });
 

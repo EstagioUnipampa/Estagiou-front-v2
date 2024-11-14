@@ -15,7 +15,8 @@ interface InputTextProps {
   inputPassword?: boolean;
   onChange: (value: string) => void;
   handleShowPassword?: () => void;
-  multiline?: boolean; 
+  multiline?: boolean;
+  value?: string;
 }
 
 export default function InputText({
@@ -24,7 +25,8 @@ export default function InputText({
   inputPassword,
   onChange,
   handleShowPassword,
-  multiline = false, 
+  multiline = false,
+  value,
 }: Readonly<InputTextProps>) {
   const fontsLoaded = useAppFonts();
 
@@ -33,7 +35,9 @@ export default function InputText({
   }
 
   return (
-    <View style={[styles.inputContainer, multiline && styles.multilineContainer]}>
+    <View
+      style={[styles.inputContainer, multiline && styles.multilineContainer]}
+    >
       <TextInput
         style={[styles.input, multiline && styles.multilineInput]}
         placeholderTextColor={"rgba(50, 50, 50, 0.4)"}
@@ -42,15 +46,18 @@ export default function InputText({
         onChange={(e) => onChange(e.nativeEvent.text)}
         secureTextEntry={inputPassword && !secureTextEntry}
         multiline={multiline}
-        textAlignVertical={multiline ? "top" : "center"} 
+        textAlignVertical={multiline ? "top" : "center"}
+        value={value}
       />
       {inputPassword && (
         <TouchableOpacity onPress={handleShowPassword} activeOpacity={0.7}>
           <Image
             style={styles.icon}
-            source={secureTextEntry 
-              ? require("../../../assets/icon/eyeOff.png")
-              : require("../../../assets/icon/eye.png")}
+            source={
+              secureTextEntry
+                ? require("../../../assets/icon/eyeOff.png")
+                : require("../../../assets/icon/eye.png")
+            }
           />
         </TouchableOpacity>
       )}
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderColor: "#1A7924",
     backgroundColor: "white",
-    height: 64, 
+    height: 64,
     borderWidth: 1,
     borderRadius: 50,
     paddingRight: 29,
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   multilineContainer: {
-    height: 150, 
+    height: 150,
     alignItems: "flex-start",
     paddingVertical: 10,
   },
@@ -85,8 +92,8 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   multilineInput: {
-    textAlignVertical: "top", 
-    paddingTop: 10, 
+    textAlignVertical: "top",
+    paddingTop: 10,
   },
   icon: {
     width: 24,

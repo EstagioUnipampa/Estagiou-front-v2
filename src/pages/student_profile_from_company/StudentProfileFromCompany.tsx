@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
-  Button,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,6 +16,7 @@ import Status from "./components/Status";
 type RootStackParamList = {
   StudentList: undefined;
   StudentProfileFromCompany: {
+    vacancyId: string;
     studentId: string;
     onStatusUpdate: (status: string) => void;
   };
@@ -24,7 +24,10 @@ type RootStackParamList = {
 
 type Props = {
   route: RouteProp<RootStackParamList, "StudentProfileFromCompany">;
-  navigation: StackNavigationProp<RootStackParamList, "StudentProfileFromCompany">;
+  navigation: StackNavigationProp<
+    RootStackParamList,
+    "StudentProfileFromCompany"
+  >;
 };
 
 type StudentProfile = {
@@ -37,10 +40,40 @@ type StudentProfile = {
 };
 
 const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
-  const { studentId, onStatusUpdate } = route.params;
+  const { studentId, onStatusUpdate, vacancyId } = route.params;
   const [student, setStudent] = useState<StudentProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<string>("");
+  const [isStatusDecided, setIsStatusDecided] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const secureToken = await SecureStore.getItemAsync("secure_token");
+        const response = await fetch(
+          `http://10.0.2.2:8080/v1/enrollment/statusdecided/${vacancyId}/${studentId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${secureToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsStatusDecided(data.decided);
+        } else {
+          Alert.alert("Erro", "Não foi possível atualizar o status");
+        }
+      } catch (error) {
+        Alert.alert("Erro", "Erro ao atualizar o status do estudante");
+      }
+    };
+
+    fetchStudent();
+  }, []);
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -52,13 +85,16 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
 
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
-        const response = await fetch(`http://10.0.2.2:8080/v1/student/${studentId}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${secureToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://10.0.2.2:8080/v1/student/${studentId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${secureToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
@@ -78,13 +114,13 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
     fetchStudent();
   }, [studentId, navigation]);
 
-  const updateStudentStatus = async (newStatus: string) => {
+  const updateStudentStatus = async (newStatus: boolean) => {
     try {
       const secureToken = await SecureStore.getItemAsync("secure_token");
       const response = await fetch(
-        `http://10.0.2.2:8080/v1/student/${studentId}/status`,
+        `http://10.0.2.2:8080/v1/enrollment/${vacancyId}/${studentId}`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             Authorization: `Bearer ${secureToken}`,
             "Content-Type": "application/json",
@@ -94,10 +130,13 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
       );
 
       if (response.ok) {
-        setStatus(newStatus);
-        onStatusUpdate(newStatus); // Atualiza o status na lista
-        Alert.alert("Sucesso", `Status atualizado para: ${newStatus}`);
-        navigation.goBack(); // Volta para a tela anterior
+        const data = await response.json();
+        console.log(data);
+
+        setStatus(data.status);
+        onStatusUpdate(data.status);
+        Alert.alert("Sucesso", `Status atualizado para: ${data.status}`);
+        navigation.goBack();
       } else {
         Alert.alert("Erro", "Não foi possível atualizar o status");
       }
@@ -106,8 +145,8 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
-  const handleApprove = () => updateStudentStatus("Approved");
-  const handleReject = () => updateStudentStatus("Rejected");
+  const handleApprove = () => updateStudentStatus(true);
+  const handleReject = () => updateStudentStatus(false);
 
   return (
     <View style={styles.container}>
@@ -134,12 +173,22 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
           <View style={styles.card}>
             <View style={styles.cardContent}>
               <View style={styles.infoContainer}>
-                <Text style={styles.name}>{`${student.name} ${student.lastName}`}</Text>
+                <Text
+                  style={styles.name}
+                >{`${student.name} ${student.lastName}`}</Text>
                 <Text style={styles.email}>{`Email: ${student.email}`}</Text>
-                <Text style={styles.course}>{`Curso: ${student.courseName}`}</Text>
-                <Text style={styles.phone}>{`Telefone: ${student.phoneNumber || "Não informado"}`}</Text>
+                <Text
+                  style={styles.course}
+                >{`Curso: ${student.courseName}`}</Text>
+                <Text style={styles.phone}>{`Telefone: ${
+                  student.phoneNumber || "Não informado"
+                }`}</Text>
               </View>
-              <Status/> 
+              <Status
+                isDecided={isStatusDecided}
+                onApprove={handleApprove}
+                onReject={handleReject}
+              />
             </View>
           </View>
         </ScrollView>

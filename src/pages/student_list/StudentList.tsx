@@ -12,11 +12,14 @@ import * as SecureStore from "expo-secure-store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import HeaderBack from "../../components/headerBack/HeaderBack";
-import { FlatList } from "react-native-reanimated/lib/typescript/Animated";
 
 type RootStackParamList = {
   StudentList: { vacancyId: string };
-  StudentProfileFromCompany: { studentId: string; onStatusUpdate: (status: string) => void };
+  StudentProfileFromCompany: {
+    vacancyId: string;
+    studentId: string;
+    onStatusUpdate: (status: string) => void;
+  };
 };
 
 type StudentListNavigationProp = StackNavigationProp<
@@ -45,18 +48,23 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const updateStudentStatus = useCallback((studentId: string, status: string) => {
-    setStudents((prevStudents) =>
-      prevStudents.map((student) =>
-        student.id === studentId ? { ...student, status } : student
-      )
-    );
-  }, []);
+  const updateStudentStatus = useCallback(
+    (studentId: string, status: string) => {
+      setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+          student.id === studentId ? { ...student, status } : student
+        )
+      );
+    },
+    []
+  );
 
   const handleStudentPress = (studentId: string) => {
     navigation.navigate("StudentProfileFromCompany", {
+      vacancyId,
       studentId,
-      onStatusUpdate: (status: string) => updateStudentStatus(studentId, status),
+      onStatusUpdate: (status: string) =>
+        updateStudentStatus(studentId, status),
     });
   };
 
@@ -79,7 +87,10 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
           const data: { enrollments: Student[] } = await response.json();
           setStudents(data.enrollments);
         } else {
-          Alert.alert("Erro", "Não foi possível carregar a lista de estudantes");
+          Alert.alert(
+            "Erro",
+            "Não foi possível carregar a lista de estudantes"
+          );
         }
       } catch (error) {
         Alert.alert("Erro", "Erro ao carregar os dados");
@@ -112,7 +123,9 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
                 >{`${item.name} ${item.lastName}`}</Text>
                 <Text style={styles.email}>{item.email}</Text>
                 <Text style={styles.course}>{`Curso: ${item.courseName}`}</Text>
-                <Text style={styles.course}>{`Status: ${item.status ?? "Pendente"}`}</Text>
+                <Text style={styles.course}>{`Status: ${
+                  item.status ?? "Pendente"
+                }`}</Text>
                 <Text style={styles.skills}>{`Habilidades: ${item.skills.join(
                   ", "
                 )}`}</Text>

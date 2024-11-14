@@ -22,6 +22,7 @@ export default function StudentRegistrations() {
         name: string;
       };
     };
+    status: string;
   };
 
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
@@ -82,7 +83,7 @@ export default function StudentRegistrations() {
             salary={`R$ ${item.jobVacancy.salary}`}
             location={item.jobVacancy.modality}
             source={require("../../../assets/images/companyLogo2.png")}
-            status={item.jobVacancy.status ?? "Pendente"}
+            status={item.status ?? "Pendente"}
           />
         ))}
       </View>

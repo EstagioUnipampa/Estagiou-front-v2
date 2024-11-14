@@ -1,23 +1,28 @@
-import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Button, StyleSheet, Text } from "react-native";
 
- 
-const Status = () => {
-  const handleApprove = () => {
-    console.log("Aprovado!");
-  };
+interface StatusProps {
+  onApprove: () => void;
+  onReject: () => void;
+  isDecided: boolean;
+}
 
-  const handleReject = () => {
-    console.log("Rejeitado!");
-  };
+const Status = ({ onApprove, onReject, isDecided }: Readonly<StatusProps>) => {
+  if (isDecided) {
+    return (
+      <View>
+        <Text>Decidido</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button title="Aprovar" color="#4CAF50" onPress={handleApprove} />
+        <Button title="Aprovar" color="#4CAF50" onPress={onApprove} />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Rejeitar" color="#F44336" onPress={handleReject} />
+        <Button title="Rejeitar" color="#F44336" onPress={onReject} />
       </View>
     </View>
   );
@@ -25,16 +30,14 @@ const Status = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonContainer: {
     width: 100,
-    marginVertical: 5, 
+    marginVertical: 5,
   },
 });
 
 export default Status;
-
-

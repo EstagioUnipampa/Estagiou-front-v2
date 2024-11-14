@@ -50,12 +50,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
   const progress = useSharedValue<number>(0);
 
-  type JobVacancy = {
-    title: string;
-    salary: string;
-    modality: string;
-  };
-
   type JobVacancyList = {
     id: string;
     title: string;
@@ -67,7 +61,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
     };
   };
 
-  const [data, setData] = useState<JobVacancy[]>([]);
+  const [data, setData] = useState<JobVacancyList[]>([]);
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
   const [enrollmentsCount, setEnrollmentsCount] = useState(0);
   const isFocused = useIsFocused();
@@ -102,7 +96,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setEnrollmentsCount(data.length);
       } else {
         console.log("Erro ao buscar dados do usuário");
@@ -166,7 +159,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("a");
     const fetchUserData = async () => {
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
@@ -276,7 +268,15 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         renderItem={({ index }) => (
           <RecommendedCard
             onPress={() =>
-              console.log("Clicou na vaga recomendada", data[index])
+              navigation.navigate("DetailsJobVacancy", {
+                id: data[index].id,
+                businessName: data[index].company.name,
+                jobTitle: data[index].title,
+                logo: require("../../../assets/images/companyLogo2.png"),
+                salary: data[index].salary,
+                location: data[index].modality,
+                description: data[index].description,
+              })
             }
             source={require("../../../assets/images/companyLogo1.png")}
             title={data[index].title}

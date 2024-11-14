@@ -16,7 +16,7 @@ type RootStackParamList = {
   BusinessVacancy: undefined;
   BottomTab: undefined;
   BusinessDetailsJobVacancy: undefined;
-  StudentList: undefined;
+  StudentList: { vacancyId: string };
 };
 
 type BusinessVacancyScreenNavigationProp = StackNavigationProp<
@@ -92,10 +92,12 @@ export default function BusinessVacancy({ navigation }: Readonly<Props>) {
         {jobVacancies.map((vacancy) => (
           <BusinessVacancyCard
             key={vacancy.id}
-            businessName="Company 1" // Você pode adicionar o nome da empresa aqui, se necessário
+            businessName="Company 2"
             vacancy={vacancy.title}
-            source={require("../../../assets/images/companyLogo1.png")} // Adicione o logo da empresa, se necessário
-            onPress={() => navigation.navigate("StudentList")} // Navegue para a tela de StudentList
+            source={require("../../../assets/images/companyLogo1.png")}
+            onPress={() =>
+              navigation.navigate("StudentList", { vacancyId: vacancy.id })
+            }
           />
         ))}
       </View>

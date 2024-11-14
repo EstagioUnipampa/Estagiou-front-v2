@@ -10,11 +10,11 @@ import {
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import HeaderBack from "../../components/headerBack/HeaderBack";
 
 type RootStackParamList = {
-  StudentList: undefined;
+  StudentList: { vacancyId: string };
   StudentProfileFromCompany: { studentId: string };
 };
 
@@ -26,7 +26,6 @@ type StudentListRouteProp = RouteProp<RootStackParamList, "StudentList">;
 
 type Props = {
   navigation: StudentListNavigationProp;
-  route: StudentListRouteProp;
 };
 
 type Student = {
@@ -38,6 +37,8 @@ type Student = {
 };
 
 const StudentList: React.FC<Props> = ({ navigation }) => {
+  const route = useRoute<StudentListRouteProp>();
+  const { vacancyId } = route.params;
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,6 +59,8 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
         console.log("Token recuperado:", secureToken ? "Sim" : "Não");
+
+        console.log("Buscando estudantes inscritos na vaga:", vacancyId);
 
         const response = await fetch(`http://10.0.2.2:8080/v1/student/list`, {
           method: "GET",

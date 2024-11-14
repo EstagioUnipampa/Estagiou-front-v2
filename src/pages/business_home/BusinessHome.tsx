@@ -20,6 +20,7 @@ import CreateJobVacancyButtonProps from "./components/CreateJobVacancyButton";
 
 type RootStackParamList = {
   BusinessHome: undefined;
+  BusinessVacancyCreation: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -153,7 +154,10 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
         source={require("../../../assets/images/confirmed.png")}
       />
 
-      <CreateJobVacancyButtonProps text="Criar nova vaga" />
+      <CreateJobVacancyButtonProps
+        text="Criar nova vaga"
+        onPress={() => navigation.navigate("BusinessVacancyCreation")}
+      />
 
       <View style={styles.availableWorksHeader}>
         <Text style={styles.availableWorksHeaderTitle}>Vagas Disponíveis</Text>

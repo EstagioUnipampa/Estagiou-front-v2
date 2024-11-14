@@ -45,109 +45,77 @@ export default function StudentSignUp({ navigation }: Readonly<Props>) {
   const [lastName, setLastName] = useState("");
   const [course, setCourse] = useState("");
   const [skills, setSkills] = useState<string[]>([]);
-  const [skillsOptions, setSkillsOptions] = useState([
-    { label: "JavaScript", value: "JavaScript" },
-    { label: "React Native", value: "React Native" },
-  ]);
+  interface SkillOption {
+    label: string;
+    value: string;
+  }
 
-  const courseOptions = [
-    { label: "Ciência da Computação", value: "Ciência da Computação" },
-    { label: "Engenharia Agrícola", value: "Engenharia Agrícola" },
-    { label: "Engenharia Civil", value: "Engenharia Civil" },
-    { label: "Engenharia de Software", value: "Engenharia de Software" },
-    {
-      label: "Engenharia de Telecomunicações",
-      value: "Engenharia de Telecomunicações",
-    },
-    { label: "Engenharia Elétrica", value: "Engenharia Elétrica" },
-    { label: "Engenharia Mecânica", value: "Engenharia Mecânica" },
-  ];
+  const [skillsOptions, setSkillsOptions] = useState<SkillOption[]>([]);
+
+  interface CourseOption {
+    label: string;
+    value: string;
+  }
+
+  const [courseOptions, setCourseOptions] = useState<CourseOption[]>([]);
+
+  function fetchCourses() {
+    fetch("http://10.0.2.2:8080/v1/courses", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const courses = data.map((course: { name: string; id: string }) => ({
+          label: course.name,
+          value: course.id,
+        }));
+        setCourseOptions(courses);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar cursos: ", error);
+        alert("Erro ao buscar cursos: " + error.message);
+      });
+  }
 
   function updateSkillsOptions(selectedCourse: string) {
-    const skillsByCourse: {
-      [key: string]: { label: string; value: string }[];
-    } = {
-      "Ciência da Computação": [
-        { label: "JavaScript", value: "JavaScript" },
-        { label: "Python", value: "Python" },
-        { label: "Java", value: "Java" },
-        { label: "Estrutura de Dados", value: "Estrutura de Dados" },
-        { label: "Banco de Dados", value: "Banco de Dados" },
-        { label: "Inteligência Artificial", value: "Inteligência Artificial" },
-        { label: "Pensamento Crítico", value: "Pensamento Crítico" },
-        { label: "Trabalho em Equipe", value: "Trabalho em Equipe" },
-      ],
-      "Engenharia Agrícola": [
-        { label: "Matlab", value: "Matlab" },
-        { label: "C++", value: "C++" },
-        { label: "Sistemas de Irrigação", value: "Sistemas de Irrigação" },
-        { label: "Topografia", value: "Topografia" },
-        { label: "Gestão de Projetos", value: "Gestão de Projetos" },
-        { label: "Sustentabilidade", value: "Sustentabilidade" },
-        { label: "Comunicação", value: "Comunicação" },
-        { label: "Liderança", value: "Liderança" },
-      ],
-      "Engenharia Civil": [
-        { label: "AutoCAD", value: "AutoCAD" },
-        { label: "SketchUp", value: "SketchUp" },
-        { label: "Planejamento Urbano", value: "Planejamento Urbano" },
-        { label: "Análise Estrutural", value: "Análise Estrutural" },
-        { label: "Gestão de Obras", value: "Gestão de Obras" },
-        { label: "Soluções Sustentáveis", value: "Soluções Sustentáveis" },
-        { label: "Resolução de Problemas", value: "Resolução de Problemas" },
-        { label: "Trabalho em Equipe", value: "Trabalho em Equipe" },
-      ],
-      "Engenharia de Software": [
-        { label: "React Native", value: "React Native" },
-        { label: "TypeScript", value: "TypeScript" },
-        { label: "Desenvolvimento Web", value: "Desenvolvimento Web" },
-        { label: "Arquitetura de Software", value: "Arquitetura de Software" },
-        {
-          label: "Controle de Versão (Git)",
-          value: "Controle de Versão (Git)",
-        },
-        { label: "Testes Automatizados", value: "Testes Automatizados" },
-        { label: "Comunicação Eficaz", value: "Comunicação Eficaz" },
-        { label: "Resolução de Conflitos", value: "Resolução de Conflitos" },
-      ],
-      "Engenharia de Telecomunicações": [
-        {
-          label: "Fundamentos de Telecomunicações",
-          value: "Fundamentos de Telecomunicações",
-        },
-        { label: "Processamento de Sinais", value: "Processamento de Sinais" },
-        { label: "Redes de Computadores", value: "Redes de Computadores" },
-        { label: "Comunicações Ópticas", value: "Comunicações Ópticas" },
-        { label: "Eletrônica Digital", value: "Eletrônica Digital" },
-        { label: "Proatividade", value: "Proatividade" },
-        { label: "Adaptabilidade", value: "Adaptabilidade" },
-        { label: "Colaboração", value: "Colaboração" },
-      ],
-      "Engenharia Elétrica": [
-        { label: "Projetos de Circuitos", value: "Projetos de Circuitos" },
-        { label: "Sistemas de Potência", value: "Sistemas de Potência" },
-        { label: "Eletrônica de Potência", value: "Eletrônica de Potência" },
-        { label: "Máquinas Elétricas", value: "Máquinas Elétricas" },
-        { label: "Programação de CLP", value: "Programação de CLP" },
-        { label: "Pensamento Crítico", value: "Pensamento Crítico" },
-        { label: "Gestão de Tempo", value: "Gestão de Tempo" },
-        { label: "Iniciativa", value: "Iniciativa" },
-      ],
-      "Engenharia Mecânica": [
-        { label: "SolidWorks", value: "SolidWorks" },
-        { label: "Termodinâmica", value: "Termodinâmica" },
-        { label: "Mecânica dos Fluidos", value: "Mecânica dos Fluidos" },
-        { label: "Projetos Mecânicos", value: "Projetos Mecânicos" },
-        { label: "Manufatura e Produção", value: "Manufatura e Produção" },
-        { label: "Trabalho em Equipe", value: "Trabalho em Equipe" },
-        { label: "Pensamento Analítico", value: "Pensamento Analítico" },
-        { label: "Comunicação Eficaz", value: "Comunicação Eficaz" },
-      ],
-    };
+    fetch("http://10.0.2.2:8080/v1/courses", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const courseData = data.find(
+          (course: { id: string }) => course.id === selectedCourse
+        );
 
-    setSkillsOptions(skillsByCourse[selectedCourse] || []);
-    setSkills([]);
+        if (courseData && courseData.skills) {
+          const updatedSkillsOptions = courseData.skills.map(
+            (skill: { id: string; name: string }) => ({
+              label: skill.name,
+              value: skill.id,
+            })
+          );
+          setSkillsOptions(updatedSkillsOptions);
+        } else {
+          setSkillsOptions([]);
+        }
+
+        setSkills([]);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar cursos: ", error);
+        alert("Erro ao buscar cursos: " + error.message);
+      });
   }
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   function handleShowPassword() {
     setShowPassword(!showPassword);
@@ -172,11 +140,13 @@ export default function StudentSignUp({ navigation }: Readonly<Props>) {
     const body = {
       name,
       lastName,
-      course,
-      skills,
+      course: course ? course : null,
+      skills: skills ? skills : [],
       email,
       password,
     };
+
+    console.log(body);
 
     fetch("http://10.0.2.2:8080/v1/student/register", {
       method: "POST",

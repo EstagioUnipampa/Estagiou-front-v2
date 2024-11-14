@@ -2,7 +2,6 @@ import React from "react";
 import {
   Image,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -16,6 +15,7 @@ interface InputTextProps {
   inputPassword?: boolean;
   onChange: (value: string) => void;
   handleShowPassword?: () => void;
+  multiline?: boolean; 
 }
 
 export default function InputText({
@@ -24,6 +24,7 @@ export default function InputText({
   inputPassword,
   onChange,
   handleShowPassword,
+  multiline = false, 
 }: Readonly<InputTextProps>) {
   const fontsLoaded = useAppFonts();
 
@@ -32,29 +33,25 @@ export default function InputText({
   }
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, multiline && styles.multilineContainer]}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, multiline && styles.multilineInput]}
         placeholderTextColor={"rgba(50, 50, 50, 0.4)"}
         placeholder={placeholder}
         cursorColor={"#000"}
         onChange={(e) => onChange(e.nativeEvent.text)}
         secureTextEntry={inputPassword && !secureTextEntry}
+        multiline={multiline}
+        textAlignVertical={multiline ? "top" : "center"} 
       />
       {inputPassword && (
         <TouchableOpacity onPress={handleShowPassword} activeOpacity={0.7}>
-          {!secureTextEntry && (
-            <Image
-              style={styles.icon}
-              source={require("../../../assets/icon/eye.png")}
-            />
-          )}
-          {secureTextEntry && (
-            <Image
-              style={styles.icon}
-              source={require("../../../assets/icon/eyeOff.png")}
-            />
-          )}
+          <Image
+            style={styles.icon}
+            source={secureTextEntry 
+              ? require("../../../assets/icon/eyeOff.png")
+              : require("../../../assets/icon/eye.png")}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -65,7 +62,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     borderColor: "#1A7924",
     backgroundColor: "white",
-    height: 64,
+    height: 64, 
     borderWidth: 1,
     borderRadius: 50,
     paddingRight: 29,
@@ -74,12 +71,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  multilineContainer: {
+    height: 150, 
+    alignItems: "flex-start",
+    paddingVertical: 10,
+  },
   input: {
     paddingLeft: 29,
     flex: 1,
     fontSize: 16,
     fontFamily: "Poppins_500Medium",
     height: "100%",
+    textAlignVertical: "center",
+  },
+  multilineInput: {
+    textAlignVertical: "top", 
+    paddingTop: 10, 
   },
   icon: {
     width: 24,

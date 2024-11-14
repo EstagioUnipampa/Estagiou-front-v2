@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/vector-icons": "^14.0.4",
+    "@react-native-picker/picker": "^2.9.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
@@ -23,6 +24,7 @@
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-document-picker": "^9.3.1",
     "react-native-element-dropdown": "^2.12.2",
     "react-native-reanimated": "~3.10.1",
     "react-native-reanimated-carousel": "^4.0.0-canary.16",

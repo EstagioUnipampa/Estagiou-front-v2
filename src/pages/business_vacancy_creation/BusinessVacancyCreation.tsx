@@ -14,14 +14,14 @@ import { useAppFonts } from "../../hooks/useAppFonts";
 import HeaderBack from "../../components/headerBack/HeaderBack";
 import InputText from "../../components/inputText/InputText";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
-import CreateJobVacancyButtonProps from "../business_home/components/CreateJobVacancyButton";
-import DocumentsUpload from "./components/DocumentsUpload";
 import { Picker } from "@react-native-picker/picker";
 import { Dropdown } from "react-native-element-dropdown";
+import Button from "../../components/button/Button";
+import * as SecureStore from "expo-secure-store";
 
 type RootStackParamList = {
   BusinessVacancyCreation: undefined;
-  BusinessHome: undefined;
+  BottomTabBusiness: undefined;
 };
 
 type BusinessVacancyCreationNavigationProp = StackNavigationProp<
@@ -41,6 +41,11 @@ export default function BusinessVacancyCreation({
   const [location, setLocation] = useState("Presencial");
   const [course, setCourse] = useState("");
   const [skills, setSkills] = useState<string[]>([]);
+  const [title, setTitle] = useState("");
+  const [role, setRole] = useState("");
+  const [hours, setHours] = useState("");
+  const [salary, setSalary] = useState("");
+  const [description, setDescription] = useState("");
 
   interface SkillOption {
     label: string;
@@ -153,6 +158,70 @@ export default function BusinessVacancyCreation({
     return <LoadingIcon />;
   }
 
+  async function handleCreateJobVacancy() {
+    if (
+      !title ||
+      !role ||
+      !hours ||
+      !salary ||
+      !description ||
+      !location ||
+      !course ||
+      skills.length === 0
+    ) {
+      alert("Preencha todos os campos para criar a vaga");
+      return;
+    }
+
+    if (isNaN(Number(salary)) || isNaN(Number(hours))) {
+      alert("Remuneração e horas devem ser números");
+      return;
+    }
+
+    const body = {
+      title,
+      role,
+      hours,
+      salary,
+      description,
+      modality: location,
+      course,
+      skills,
+    };
+
+    const secureToken = await SecureStore.getItemAsync("secure_token");
+
+    fetch("http://10.0.2.2:8080/v1/jobvacancy", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secureToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setTitle("");
+          setRole("");
+          setHours("");
+          setSalary("");
+          setDescription("");
+          setLocation("Presencial");
+          setCourse("");
+          setSkills([]);
+          alert("Vaga criada com sucesso!");
+          navigation.navigate("BottomTabBusiness");
+        } else {
+          alert("Erro ao criar vaga");
+          console.error("Erro ao criar vaga: ", response);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao criar vaga: ", error);
+        alert("Erro ao criar vaga: " + error.message);
+      });
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -169,8 +238,26 @@ export default function BusinessVacancyCreation({
           </View>
           <View style={styles.formGroup}>
             <View style={styles.formFields}>
-              <Text style={styles.inputTitle}>Nome da Vaga</Text>
-              <InputText placeholder="" onChange={() => {}} />
+              <Text style={styles.inputTitle}>Título</Text>
+              <InputText
+                placeholder="Título da vaga"
+                onChange={(e) => setTitle(e)}
+                value={title}
+              />
+
+              <Text style={styles.inputTitle}>Cargo</Text>
+              <InputText
+                placeholder="Cargo da vaga"
+                onChange={(e) => setRole(e)}
+                value={role}
+              />
+
+              <Text style={styles.inputTitle}>Horas</Text>
+              <InputText
+                placeholder="Horas da vaga"
+                onChange={(e) => setHours(e)}
+                value={hours}
+              />
 
               <Text style={styles.courseTitle}>Curso da Vaga</Text>
               <Dropdown
@@ -218,7 +305,11 @@ export default function BusinessVacancyCreation({
               </View>
 
               <Text style={styles.inputTitle}>Remuneração</Text>
-              <InputText placeholder="" onChange={() => {}} />
+              <InputText
+                placeholder="Remuneração"
+                onChange={(e) => setSalary(e)}
+                value={salary}
+              />
 
               <Text style={styles.inputTitle}>Localização</Text>
               <View style={styles.pickerContainer}>
@@ -229,22 +320,19 @@ export default function BusinessVacancyCreation({
                 >
                   <Picker.Item label="Presencial" value="Presencial" />
                   <Picker.Item label="Remoto" value="Remoto" />
+                  <Picker.Item label="Híbrido" value="Híbrido" />
                 </Picker>
               </View>
 
               <Text style={styles.inputTitle}>Descrição</Text>
               <InputText
                 placeholder="Adicione na descrição os documentos que o candidato deve enviar."
-                onChange={() => {}}
+                onChange={(e) => setDescription(e)}
                 multiline={true}
+                value={description}
               />
-              <Text style={styles.inputTitle}>Documentos</Text>
-              <DocumentsUpload />
             </View>
-            <CreateJobVacancyButtonProps
-              text="Criar nova vaga"
-              onPress={() => navigation.navigate("BusinessVacancyCreation")}
-            />
+            <Button text="Criar vaga" onPress={handleCreateJobVacancy} />
           </View>
         </View>
       </ScrollView>
@@ -319,7 +407,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_500Medium",
     fontSize: 16,
     textAlign: "left",
-    // paddingLeft: 29,
   },
   skillItem: {
     paddingVertical: 10,

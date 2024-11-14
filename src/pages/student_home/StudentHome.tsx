@@ -144,7 +144,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
           const data = await response.json();
           setUserData({
             name: data.name,
-            enrollmentsCount: data.enrollments.length,
+            enrollmentsCount: data.enrollments?.length || 0,
           });
         } else {
           console.log("Erro ao buscar dados do usuário");

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as SecureStore from "expo-secure-store";
@@ -56,83 +57,55 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
 
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
 
-  useEffect(() => {
-    const fetchJobVacancies = async () => {
-      try {
-        // const secureToken = await SecureStore.getItemAsync("secure_token");
-        // const response = await fetch(
-        //   `http://10.0.2.2:8080/v1/jobvacancy/list`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       Authorization: `Bearer ${secureToken}`,
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
-        // if (response.ok) {
-        //   const data = await response.json();
-        //   const firstFive = data.slice(0, 5);
-        //   setData(firstFive);
-        //   setDataList(data);
-        // } else {
-        //   console.log("Erro ao buscar dados do usuário");
-        // }
-      } catch (error) {
-        console.error("Erro: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJobVacancies();
-  }, []);
-
   const [userData, setUserData] = useState({
     name: "",
     jobVacancies: 0,
   });
 
   const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
+
+  async function fetchUserData() {
+    try {
+      const secureToken = await SecureStore.getItemAsync("secure_token");
+
+      const response = await fetch(`http://10.0.2.2:8080/v1/company/profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${secureToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        console.log("data", data);
+
+        setUserData({
+          name: data.name,
+          jobVacancies: data.jobVacancies?.length || 0,
+        });
+        setDataList(data.jobVacancies);
+      } else {
+        console.log("Erro ao buscar dados do usuário");
+      }
+    } catch (error) {
+      console.error("Erro: ", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const secureToken = await SecureStore.getItemAsync("secure_token");
-
-        const response = await fetch(
-          `http://10.0.2.2:8080/v1/company/profile`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${secureToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          console.log("data", data);
-
-          setUserData({
-            name: data.name,
-            jobVacancies: data.jobVacancies?.length || 0,
-          });
-          setDataList(data.jobVacancies);
-        } else {
-          console.log("Erro ao buscar dados do usuário");
-        }
-      } catch (error) {
-        console.error("Erro: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchUserData();
+    }
+  }, [isFocused]);
 
   if (!fontsLoaded) {
     return <LoadingIcon />;

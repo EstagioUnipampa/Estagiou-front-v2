@@ -29,13 +29,13 @@ const MenuTabIcon = ({ focused }: { focused: boolean }) => (
   />
 );
 
-const DocumentosTabIcon = ({ focused }: { focused: boolean }) => (
-  <TabIcon
-    focused={focused}
-    imageNonActive={require("../../../assets/icon/document.png")}
-    imageActive={require("../../../assets/icon/document-active.png")}
-  />
-);
+// const DocumentosTabIcon = ({ focused }: { focused: boolean }) => (
+//   <TabIcon
+//     focused={focused}
+//     imageNonActive={require("../../../assets/icon/document.png")}
+//     imageActive={require("../../../assets/icon/document-active.png")}
+//   />
+// );
 
 const InscricoesTabIcon = ({ focused }: { focused: boolean }) => (
   <TabIcon
@@ -99,13 +99,13 @@ export default function BottomTab() {
           tabBarIcon: MenuTabIcon,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Documentos"
         component={StudentDocuments}
         options={{
           tabBarIcon: DocumentosTabIcon,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Inscrições"
         component={StudentRegistrations}

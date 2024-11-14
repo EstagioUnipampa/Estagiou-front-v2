@@ -40,11 +40,13 @@ type JobVacancy = {
 
 type CompanyProfile = {
   jobVacancies: JobVacancy[];
+  name: string;
 };
 
 export default function BusinessVacancy({ navigation }: Readonly<Props>) {
   const [jobVacancies, setJobVacancies] = useState<JobVacancy[]>([]);
   const [loading, setLoading] = useState(true);
+  const [companyname, setCompanyname] = useState("");
 
   useEffect(() => {
     const fetchJobVacancies = async () => {
@@ -63,7 +65,8 @@ export default function BusinessVacancy({ navigation }: Readonly<Props>) {
 
         if (response.ok) {
           const data: CompanyProfile = await response.json();
-          setJobVacancies(data.jobVacancies); // Atualiza o estado com as vagas de emprego
+          setJobVacancies(data.jobVacancies);
+          setCompanyname(data.name);
         } else {
           console.error("Erro ao buscar as vagas de emprego");
         }
@@ -92,7 +95,7 @@ export default function BusinessVacancy({ navigation }: Readonly<Props>) {
         {jobVacancies.map((vacancy) => (
           <BusinessVacancyCard
             key={vacancy.id}
-            businessName="Company 2"
+            businessName={companyname}
             vacancy={vacancy.title}
             source={require("../../../assets/images/companyLogo1.png")}
             onPress={() =>

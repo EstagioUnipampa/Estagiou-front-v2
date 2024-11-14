@@ -48,6 +48,7 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
   const fontsLoaded = useAppFonts();
 
   type JobVacancyList = {
+    status: string;
     id: string;
     title: string;
     salary: string;
@@ -125,12 +126,6 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
             source={require("../../../assets/images/userIcon.png")}
           />
         </View>
-        <View style={styles.searchInput}>
-          <SearchInput
-            placeholder="Pesquise vagas aqui"
-            onChange={() => console.log("clicou")}
-          />
-        </View>
       </SafeAreaView>
 
       <Card
@@ -156,22 +151,23 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
         {dataList.map((item) => (
           <AvailableCard
             key={item.id}
-            onPress={() => navigation.navigate('BusinessDetailsJobVacancy', { 
-              businessName: userData.name, 
-              id: item.id, 
-              title: item.title, 
-              salary: item.salary, 
-              modality: item.modality, 
+            onPress={() => navigation.navigate('BusinessDetailsJobVacancy', {
+              businessName: userData.name,
+              id: item.id,
+              title: item.title,
+              salary: item.salary,
+              modality: item.modality,
               location: item.modality,
-              logo: require("../../../assets/images/companyLogo2.png"), 
+              logo: require("../../../assets/images/companyLogo2.png"),
               description: item.description
             })}
             businessName={userData.name}
             title={item.title}
             salary={`R$ ${item.salary}`}
             location={item.modality}
-            source={require("../../../assets/images/companyLogo2.png")}
-          ></AvailableCard>
+            source={require("../../../assets/images/companyLogo2.png")} 
+            status={item.status ?? "Aberta"}
+            ></AvailableCard>
         ))}
       </View>
     </ScrollView>
@@ -210,13 +206,6 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 28,
-  },
-  searchInput: {
-    display: "flex",
-    alignItems: "center",
-    paddingStart: 30,
-    paddingEnd: 30,
-    paddingBottom: 25,
   },
   recommendedWorksHeader: {
     paddingStart: 30,

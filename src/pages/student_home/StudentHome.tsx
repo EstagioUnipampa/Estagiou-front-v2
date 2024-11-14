@@ -210,12 +210,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
             source={require("../../../assets/images/userIcon.png")}
           />
         </View>
-        <View style={styles.searchInput}>
-          <SearchInput
-            placeholder="Pesquise vagas aqui"
-            onChange={() => console.log("clicou")}
-          />
-        </View>
       </SafeAreaView>
       <Card
         number={enrollmentsCount}
@@ -352,13 +346,6 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 28,
-  },
-  searchInput: {
-    display: "flex",
-    alignItems: "center",
-    paddingStart: 30,
-    paddingEnd: 30,
-    paddingBottom: 25,
   },
   recommendedWorksHeader: {
     paddingStart: 30,

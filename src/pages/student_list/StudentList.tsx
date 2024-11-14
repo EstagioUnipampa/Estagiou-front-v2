@@ -18,7 +18,6 @@ type RootStackParamList = {
   StudentProfileFromCompany: {
     vacancyId: string;
     studentId: string;
-    onStatusUpdate: (status: string) => void;
   };
 };
 
@@ -63,8 +62,6 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
     navigation.navigate("StudentProfileFromCompany", {
       vacancyId,
       studentId,
-      onStatusUpdate: (status: string) =>
-        updateStudentStatus(studentId, status),
     });
   };
 

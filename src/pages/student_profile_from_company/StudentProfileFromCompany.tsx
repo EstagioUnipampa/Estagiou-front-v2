@@ -18,7 +18,6 @@ type RootStackParamList = {
   StudentProfileFromCompany: {
     vacancyId: string;
     studentId: string;
-    onStatusUpdate: (status: string) => void;
   };
 };
 
@@ -40,7 +39,7 @@ type StudentProfile = {
 };
 
 const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
-  const { studentId, onStatusUpdate, vacancyId } = route.params;
+  const { studentId, vacancyId } = route.params;
   const [student, setStudent] = useState<StudentProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState<string>("");
@@ -134,7 +133,6 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
         console.log(data);
 
         setStatus(data.status);
-        onStatusUpdate(data.status);
         Alert.alert("Sucesso", `Status atualizado para: ${data.status}`);
         navigation.goBack();
       } else {

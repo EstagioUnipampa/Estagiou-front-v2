@@ -20,7 +20,7 @@ import CreateJobVacancyButtonProps from "./components/CreateJobVacancyButton";
 
 type RootStackParamList = {
   BusinessHome: undefined;
-  BusinessVacancyCreation: undefined;
+  BusinessVacancy: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -152,6 +152,7 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
         number={userData.jobVacancies}
         text="Vagas Criadas"
         source={require("../../../assets/images/confirmed.png")}
+        onPress={() => console.log("clicou")}
       />
 
       <CreateJobVacancyButtonProps

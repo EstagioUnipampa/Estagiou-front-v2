@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Button from "../../components/button/Button";
 import HeaderBack from "../../components/headerBack/HeaderBack";
+import * as SecureStore from "expo-secure-store";
 
 type RootStackParamList = {
   DetailsJobVacancy: {
@@ -40,7 +41,6 @@ type DetailsJobVacancyRouteProp = RouteProp<
 type Props = {
   navigation: HomeScreenNavigationProp;
   route: DetailsJobVacancyRouteProp;
-  
 };
 
 export default function DetailsJobVacancy({
@@ -48,7 +48,29 @@ export default function DetailsJobVacancy({
   route,
 }: Readonly<Props>) {
   console.log(route.params);
-  const { id, businessName, jobTitle, salary, logo, location, description } = route.params;
+  const { id, businessName, jobTitle, salary, logo, location, description } =
+    route.params;
+
+  async function handleSubscribe() {
+    const secureToken = await SecureStore.getItemAsync("secure_token");
+
+    await fetch(`http://10.0.2.2:8080/v1/enrollment/register`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secureToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        jobVacancyId: id,
+      }),
+    }).then((response) => {
+      if (response.ok) {
+        alert("Inscrição realizada com sucesso");
+      } else {
+        alert("Erro ao realizar inscrição");
+      }
+    });
+  }
 
   return (
     <>
@@ -102,18 +124,11 @@ export default function DetailsJobVacancy({
           {/* Seção de Descrição do estágio */}
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionTitle}>Descrição do Estágio</Text>
-            <Text style={styles.descriptionText}>
-              {description}
-            </Text>
+            <Text style={styles.descriptionText}>{description}</Text>
           </View>
 
           <View style={styles.buttonGroup}>
-            <Button
-              text="Inscrever-se"
-              onPress={() => {
-                console.log(id);
-              }}
-            />
+            <Button text="Inscrever-se" onPress={handleSubscribe} />
           </View>
         </View>
       </ScrollView>

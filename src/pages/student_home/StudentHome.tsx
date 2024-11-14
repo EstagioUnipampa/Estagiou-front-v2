@@ -22,6 +22,7 @@ import AvailableCard from "./components/AvailableCard";
 import { StackNavigationProp } from "@react-navigation/stack";
 import LoadingIcon from "../../components/loadingIcon/LoadingIcon";
 import * as SecureStore from "expo-secure-store";
+import { useIsFocused } from "@react-navigation/native";
 
 type RootStackParamList = {
   DetailsJobVacancy: {
@@ -68,6 +69,8 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
 
   const [data, setData] = useState<JobVacancy[]>([]);
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
+  const [enrollmentsCount, setEnrollmentsCount] = useState(0);
+  const isFocused = useIsFocused();
 
   const ref = React.useRef<ICarouselInstance>(null);
 
@@ -81,6 +84,45 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
       animated: true,
     });
   };
+
+  const fetchCount = async () => {
+    try {
+      const secureToken = await SecureStore.getItemAsync("secure_token");
+
+      const response = await fetch(
+        `http://10.0.2.2:8080/v1/enrollment/student`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${secureToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setEnrollmentsCount(data.length);
+      } else {
+        console.log("Erro ao buscar dados do usuário");
+      }
+    } catch (error) {
+      console.error("Erro: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCount();
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchCount();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     const fetchJobVacancies = async () => {
@@ -119,12 +161,12 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
 
   const [userData, setUserData] = useState({
     name: "",
-    enrollmentsCount: 0,
   });
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("a");
     const fetchUserData = async () => {
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
@@ -144,7 +186,6 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
           const data = await response.json();
           setUserData({
             name: data.name,
-            enrollmentsCount: data.enrollments?.length || 0,
           });
         } else {
           console.log("Erro ao buscar dados do usuário");
@@ -185,7 +226,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         </View>
       </SafeAreaView>
       <Card
-        number={userData.enrollmentsCount}
+        number={enrollmentsCount}
         text="Incrições"
         source={require("../../../assets/images/confirmed.png")}
       />

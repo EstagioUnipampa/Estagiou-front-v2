@@ -12,6 +12,9 @@ import BusinessHome from "./src/pages/business_home/BusinessHome";
 import BusinessVacancySubscribes from "./src/pages/business_vacancy_subscribes/BusinessVacancySubscribes";
 import BusinesVacancy from "./src/pages/business_vacancy/BusinessVacancy";
 import BusinessDetailsJobVacancy from "./src/pages/business_details_job_vacancy/BusinessDetailsJobVacancy";
+import StudentList from "./src/pages/student_list/StudentList";
+import StudentProfile from "./src/pages/student_profile/StudentRegistrations";
+import StudentProfileFromCompany from "./src/pages/student_profile_from_company/StudentProfileFromCompany";
 
 const Stack = createStackNavigator();
 
@@ -25,9 +28,19 @@ export default function App() {
         <Stack.Screen name="BusinessHome" component={BusinessHome} />
         <Stack.Screen name="BusinessLogin" component={BusinessLogin} />
         <Stack.Screen name="DetailsJobVacancy" component={DetailsJobVacancy} />
+        <Stack.Screen
+          name="BusinessDetailsJobVacancy"
+          component={BusinessDetailsJobVacancy}
+        />
+        <Stack.Screen name="StudentList" component={StudentList} />
 
         <Stack.Screen name="BottomTab" component={BottomTab} />
         <Stack.Screen name="BottomTabBusiness" component={BottomTabBusiness} />
+        <Stack.Screen name="StudentProfile" component={StudentProfile} />
+        <Stack.Screen
+          name="StudentProfileFromCompany"
+          component={StudentProfileFromCompany}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -23,7 +23,6 @@ type RootStackParamList = {
   };
   BottomTab: undefined;
   BusinessVacancySubscribes: undefined;
-
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -39,6 +38,11 @@ type BusinessDetailsJobVacancyRouteProp = RouteProp<
 type Props = {
   navigation: HomeScreenNavigationProp;
   route: BusinessDetailsJobVacancyRouteProp;
+  params: {
+    businessName: string;
+    vacancy: string;
+    source: any;
+  };
 };
 
 export default function BusinessDetailsJobVacancy({
@@ -137,7 +141,9 @@ export default function BusinessDetailsJobVacancy({
           <View style={styles.buttonGroup}>
             <Button
               text="Visualizar Inscrições"
-              onPress={() => {navigation.navigate("BusinessVacancySubscribes")}}
+              onPress={() => {
+                navigation.navigate("BusinessVacancySubscribes");
+              }}
             />
           </View>
         </View>

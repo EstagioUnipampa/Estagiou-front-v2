@@ -7,6 +7,7 @@ import StudentRegistrations from "../../pages/student_subscribes/StudentSubscrib
 import LoadingIcon from "../loadingIcon/LoadingIcon";
 import BusinessHome from "../../pages/business_home/BusinessHome";
 import BusinessProfile from "../../pages/business_profile/BusinessProfile";
+import BusinessVacancy from "../../pages/business_vacancy/BusinessVacancy";
 // import InternshipDetails from "../../pages/intership_details/IntershipDetails";
 
 const Tab = createBottomTabNavigator();
@@ -29,13 +30,13 @@ const MenuTabIcon = ({ focused }: { focused: boolean }) => (
   />
 );
 
-const DocumentosTabIcon = ({ focused }: { focused: boolean }) => (
-  <TabIcon
-    focused={focused}
-    imageNonActive={require("../../../assets/icon/document.png")}
-    imageActive={require("../../../assets/icon/document-active.png")}
-  />
-);
+// const DocumentosTabIcon = ({ focused }: { focused: boolean }) => (
+//   <TabIcon
+//     focused={focused}
+//     imageNonActive={require("../../../assets/icon/document.png")}
+//     imageActive={require("../../../assets/icon/document-active.png")}
+//   />
+// );
 
 const InscricoesTabIcon = ({ focused }: { focused: boolean }) => (
   <TabIcon
@@ -99,16 +100,16 @@ export default function BottomTabBusiness() {
           tabBarIcon: MenuTabIcon,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Documentos"
         component={StudentDocuments}
         options={{
           tabBarIcon: DocumentosTabIcon,
         }}
-      />
+      /> */}
       <Tab.Screen
-        name="Inscrições"
-        component={StudentRegistrations}
+        name="Vagas criadas"
+        component={BusinessVacancy}
         options={{
           tabBarIcon: InscricoesTabIcon,
         }}

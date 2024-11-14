@@ -21,6 +21,7 @@ import CreateJobVacancyButtonProps from "./components/CreateJobVacancyButton";
 type RootStackParamList = {
   BusinessHome: undefined;
   BusinessVacancy: undefined;
+  BusinessVacancyCreation: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<

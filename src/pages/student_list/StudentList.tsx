@@ -62,18 +62,21 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
 
         console.log("Buscando estudantes inscritos na vaga:", vacancyId);
 
-        const response = await fetch(`http://10.0.2.2:8080/v1/student/list`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${secureToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://10.0.2.2:8080/v1/jobvacancy/${vacancyId}/enrollments`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${secureToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.ok) {
-          const data: Student[] = await response.json();
-          console.log("Estudantes carregados:", data.length);
-          setStudents(data);
+          const data: { enrollments: Student[] } = await response.json();
+          console.log("Estudantes carregados:", data.enrollments.length);
+          setStudents(data.enrollments);
         } else {
           console.log("Erro ao buscar dados dos estudantes");
           Alert.alert(

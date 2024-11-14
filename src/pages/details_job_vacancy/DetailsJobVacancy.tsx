@@ -1,6 +1,6 @@
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Image,
   ImageSourcePropType,
@@ -23,6 +23,7 @@ type RootStackParamList = {
     logo: ImageSourcePropType;
     description: string;
     id: string;
+    isEnroll: boolean;
   };
   BottomTab: undefined;
   BusinessVacancySubscribes: undefined;
@@ -47,9 +48,18 @@ export default function DetailsJobVacancy({
   navigation,
   route,
 }: Readonly<Props>) {
-  console.log(route.params);
-  const { id, businessName, jobTitle, salary, logo, location, description } =
-    route.params;
+  const {
+    id,
+    businessName,
+    jobTitle,
+    salary,
+    logo,
+    location,
+    description,
+    isEnroll,
+  } = route.params;
+
+  const [isEnrolled, setIsEnrolled] = React.useState(isEnroll);
 
   async function handleSubscribe() {
     const secureToken = await SecureStore.getItemAsync("secure_token");
@@ -63,14 +73,47 @@ export default function DetailsJobVacancy({
       body: JSON.stringify({
         jobVacancyId: id,
       }),
-    }).then((response) => {
-      if (response.ok) {
-        alert("Inscrição realizada com sucesso");
-      } else {
-        alert("Erro ao realizar inscrição");
-      }
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Inscrição realizada com sucesso");
+          setIsEnrolled(true);
+          return response.json();
+        } else {
+          alert("Erro ao realizar inscrição");
+        }
+      })
+      .then((data) => {
+        setIsEnrolled(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
+
+  useEffect(() => {
+    async function isEnrolled() {
+      const secureToken = await SecureStore.getItemAsync("secure_token");
+      await fetch(`http://10.0.2.2:8080/v1/jobvacancy/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${secureToken}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setIsEnrolled(data.enroll);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    isEnrolled();
+  }, []);
 
   return (
     <>
@@ -128,7 +171,11 @@ export default function DetailsJobVacancy({
           </View>
 
           <View style={styles.buttonGroup}>
-            <Button text="Inscrever-se" onPress={handleSubscribe} />
+            <Button
+              text={isEnrolled ? "Inscrito" : "Inscrever-se"}
+              onPress={handleSubscribe}
+              disabled={isEnrolled}
+            />
           </View>
         </View>
       </ScrollView>

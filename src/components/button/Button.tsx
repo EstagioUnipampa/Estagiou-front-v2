@@ -6,9 +6,14 @@ import LoadingIcon from "../loadingIcon/LoadingIcon";
 interface ButtonProps {
   text: string;
   onPress: () => void;
+  disabled?: boolean;
 }
 
-export default function Button({ text, onPress }: Readonly<ButtonProps>) {
+export default function Button({
+  text,
+  onPress,
+  disabled,
+}: Readonly<ButtonProps>) {
   const fontsLoaded = useAppFonts();
 
   if (!fontsLoaded) {
@@ -17,6 +22,7 @@ export default function Button({ text, onPress }: Readonly<ButtonProps>) {
 
   return (
     <TouchableOpacity
+      disabled={disabled}
       style={styles.container}
       onPress={onPress}
       activeOpacity={0.7}

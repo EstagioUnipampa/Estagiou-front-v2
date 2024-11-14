@@ -1,65 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import Header from "../../components/header/Header";
 import SubscribeCard from "./components/SubscribeCard";
 import AvailableCard from "../business_home/components/AvailableCard";
 
 export default function StudentRegistrations() {
+  const isFocused = useIsFocused();
   type JobVacancyList = {
-    id: string;
-    title: string;
-    salary: string;
-    modality: string;
+    jobVacancy: {
+      id: string;
+      title: string;
+      role: string;
+      description: string;
+      salary: string;
+      hours: string;
+      modality: string;
+      company: {
+        name: string;
+      };
+    };
   };
 
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
 
-  const [userData, setUserData] = useState({
-    name: "",
-    jobVacancies: 0,
-  });
-
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const secureToken = await SecureStore.getItemAsync("secure_token");
+  const fetchUserData = async () => {
+    try {
+      const secureToken = await SecureStore.getItemAsync("secure_token");
 
-        const response = await fetch(
-          `http://10.0.2.2:8080/v1/company/profile`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${secureToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          console.log("data", data);
-
-          setUserData({
-            name: data.name,
-            jobVacancies: data.jobVacancies?.length || 0,
-          });
-          setDataList(data.jobVacancies);
-        } else {
-          console.log("Erro ao buscar dados do usuário");
+      const response = await fetch(
+        `http://10.0.2.2:8080/v1/enrollment/student`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${secureToken}`,
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
-        console.error("Erro: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      );
 
+      if (response.ok) {
+        const data = await response.json();
+
+        console.log("data", data);
+
+        setDataList(data);
+      } else {
+        console.log("Erro ao buscar dados do usuário");
+      }
+    } catch (error) {
+      console.error("Erro: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchUserData();
+    }
+  }, [isFocused]);
 
   return (
     <ScrollView style={styles.container}>
@@ -67,14 +74,14 @@ export default function StudentRegistrations() {
       <View style={styles.availableWorksContainer}>
         {dataList.map((item) => (
           <AvailableCard
-            key={item.id}
+            key={item.jobVacancy.id}
             onPress={() => console.log("clicou")}
-            businessName={userData.name}
-            title={item.title}
-            salary={`R$ ${item.salary}`}
-            location={item.modality}
+            businessName={item.jobVacancy.company.name}
+            title={item.jobVacancy.title}
+            salary={`R$ ${item.jobVacancy.salary}`}
+            location={item.jobVacancy.modality}
             source={require("../../../assets/images/companyLogo2.png")}
-          ></AvailableCard>
+          />
         ))}
       </View>
     </ScrollView>

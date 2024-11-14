@@ -6,23 +6,25 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  Button,
 } from "react-native";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as SecureStore from "expo-secure-store";
 import HeaderBack from "../../components/headerBack/HeaderBack";
+import Status from "./components/Status";
 
 type RootStackParamList = {
   StudentList: undefined;
-  StudentProfileFromCompany: { studentId: string };
+  StudentProfileFromCompany: {
+    studentId: string;
+    onStatusUpdate: (status: string) => void;
+  };
 };
 
 type Props = {
   route: RouteProp<RootStackParamList, "StudentProfileFromCompany">;
-  navigation: StackNavigationProp<
-    RootStackParamList,
-    "StudentProfileFromCompany"
-  >;
+  navigation: StackNavigationProp<RootStackParamList, "StudentProfileFromCompany">;
 };
 
 type StudentProfile = {
@@ -35,20 +37,14 @@ type StudentProfile = {
 };
 
 const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
-  console.log("Componente StudentProfileFromCompany montado");
-  console.log("Parâmetros recebidos:", route.params);
-
+  const { studentId, onStatusUpdate } = route.params;
   const [student, setStudent] = useState<StudentProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState<string>("");
 
   useEffect(() => {
-    console.log("useEffect executado");
-
     const fetchStudent = async () => {
-      console.log("Iniciando fetchStudent");
-
-      if (!route.params?.studentId) {
-        console.log("StudentId não encontrado nos parâmetros");
+      if (!studentId) {
         Alert.alert("Erro", "ID do estudante não encontrado");
         navigation.goBack();
         return;
@@ -56,42 +52,62 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
 
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
-        console.log("Token recuperado:", secureToken ? "Sim" : "Não");
-
-        const response = await fetch(
-          `http://10.0.2.2:8080/v1/student/${route.params.studentId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${secureToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        console.log("Status da resposta:", response.status);
+        const response = await fetch(`http://10.0.2.2:8080/v1/student/${studentId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${secureToken}`,
+            "Content-Type": "application/json",
+          },
+        });
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Dados recebidos:", data);
           setStudent(data);
         } else {
-          console.log("Resposta não ok:", response.status);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
       } catch (error) {
-        console.error("Erro detalhado:", error);
         Alert.alert("Erro", "Não foi possível carregar os dados do estudante", [
           { text: "OK", onPress: () => navigation.goBack() },
         ]);
       } finally {
-        console.log("Finalizando fetch");
         setLoading(false);
       }
     };
 
     fetchStudent();
-  }, [route.params?.studentId, navigation]);
+  }, [studentId, navigation]);
+
+  const updateStudentStatus = async (newStatus: string) => {
+    try {
+      const secureToken = await SecureStore.getItemAsync("secure_token");
+      const response = await fetch(
+        `http://10.0.2.2:8080/v1/student/${studentId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${secureToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (response.ok) {
+        setStatus(newStatus);
+        onStatusUpdate(newStatus); // Atualiza o status na lista
+        Alert.alert("Sucesso", `Status atualizado para: ${newStatus}`);
+        navigation.goBack(); // Volta para a tela anterior
+      } else {
+        Alert.alert("Erro", "Não foi possível atualizar o status");
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao atualizar o status do estudante");
+    }
+  };
+
+  const handleApprove = () => updateStudentStatus("Approved");
+  const handleReject = () => updateStudentStatus("Rejected");
 
   return (
     <View style={styles.container}>
@@ -116,14 +132,15 @@ const StudentProfileFromCompany: React.FC<Props> = ({ route, navigation }) => {
       ) : (
         <ScrollView style={styles.scrollContainer}>
           <View style={styles.card}>
-            <Text
-              style={styles.name}
-            >{`${student.name} ${student.lastName}`}</Text>
-            <Text style={styles.email}>{`Email: ${student.email}`}</Text>
-            <Text style={styles.course}>{`Curso: ${student.courseName}`}</Text>
-            <Text style={styles.phone}>{`Telefone: ${
-              student.phoneNumber || "Não informado"
-            }`}</Text>
+            <View style={styles.cardContent}>
+              <View style={styles.infoContainer}>
+                <Text style={styles.name}>{`${student.name} ${student.lastName}`}</Text>
+                <Text style={styles.email}>{`Email: ${student.email}`}</Text>
+                <Text style={styles.course}>{`Curso: ${student.courseName}`}</Text>
+                <Text style={styles.phone}>{`Telefone: ${student.phoneNumber || "Não informado"}`}</Text>
+              </View>
+              <Status/> 
+            </View>
           </View>
         </ScrollView>
       )}
@@ -188,6 +205,19 @@ const styles = StyleSheet.create({
   phone: {
     fontSize: 14,
     color: "#444",
+  },
+  cardContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
   },
 });
 

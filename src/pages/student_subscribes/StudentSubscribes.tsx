@@ -17,6 +17,7 @@ export default function StudentRegistrations() {
       salary: string;
       hours: string;
       modality: string;
+      status: string;
       company: {
         name: string;
       };
@@ -81,6 +82,7 @@ export default function StudentRegistrations() {
             salary={`R$ ${item.jobVacancy.salary}`}
             location={item.jobVacancy.modality}
             source={require("../../../assets/images/companyLogo2.png")}
+            status={item.jobVacancy.status ?? "Pendente"}
           />
         ))}
       </View>

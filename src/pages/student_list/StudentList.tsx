@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import HeaderBack from "../../components/headerBack/HeaderBack";
 
 type RootStackParamList = {
   StudentList: { vacancyId: string };
-  StudentProfileFromCompany: { studentId: string };
+  StudentProfileFromCompany: { studentId: string; onStatusUpdate: (status: string) => void };
 };
 
 type StudentListNavigationProp = StackNavigationProp<
@@ -34,6 +34,7 @@ type Student = {
   name: string;
   lastName: string;
   courseName: string;
+  status: string;
 };
 
 const StudentList: React.FC<Props> = ({ navigation }) => {
@@ -42,26 +43,25 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const updateStudentStatus = useCallback((studentId: string, status: string) => {
+    setStudents((prevStudents) =>
+      prevStudents.map((student) =>
+        student.id === studentId ? { ...student, status } : student
+      )
+    );
+  }, []);
+
   const handleStudentPress = (studentId: string) => {
-    console.log("Tentando navegar para o perfil do estudante:", studentId);
-    try {
-      navigation.navigate("StudentProfileFromCompany", {
-        studentId: studentId,
-      });
-    } catch (error) {
-      console.error("Erro na navegação:", error);
-      Alert.alert("Erro", "Não foi possível abrir o perfil do estudante");
-    }
+    navigation.navigate("StudentProfileFromCompany", {
+      studentId,
+      onStatusUpdate: (status: string) => updateStudentStatus(studentId, status),
+    });
   };
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const secureToken = await SecureStore.getItemAsync("secure_token");
-        console.log("Token recuperado:", secureToken ? "Sim" : "Não");
-
-        console.log("Buscando estudantes inscritos na vaga:", vacancyId);
-
         const response = await fetch(
           `http://10.0.2.2:8080/v1/jobvacancy/${vacancyId}/enrollments`,
           {
@@ -75,17 +75,11 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
 
         if (response.ok) {
           const data: { enrollments: Student[] } = await response.json();
-          console.log("Estudantes carregados:", data.enrollments.length);
           setStudents(data.enrollments);
         } else {
-          console.log("Erro ao buscar dados dos estudantes");
-          Alert.alert(
-            "Erro",
-            "Não foi possível carregar a lista de estudantes"
-          );
+          Alert.alert("Erro", "Não foi possível carregar a lista de estudantes");
         }
       } catch (error) {
-        console.error("Erro ao buscar estudantes:", error);
         Alert.alert("Erro", "Erro ao carregar os dados");
       } finally {
         setLoading(false);
@@ -116,6 +110,7 @@ const StudentList: React.FC<Props> = ({ navigation }) => {
                 >{`${item.name} ${item.lastName}`}</Text>
                 <Text style={styles.email}>{item.email}</Text>
                 <Text style={styles.course}>{`Curso: ${item.courseName}`}</Text>
+                <Text style={styles.course}>{`Status: ${item.status ?? "Pendente"}`}</Text>
               </View>
             </TouchableOpacity>
           ))}

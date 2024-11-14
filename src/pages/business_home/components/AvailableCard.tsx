@@ -7,6 +7,7 @@ interface AvailableCardProps {
   salary: string;
   location: string;
   source: ImageProps;
+  status: string;
   onPress: () => void;
 }
 
@@ -16,6 +17,7 @@ export default function AvailableCard({
   salary,
   location,
   source,
+  status,
   onPress,
 }: Readonly<AvailableCardProps>) {
   return (
@@ -33,6 +35,11 @@ export default function AvailableCard({
             text={location}
             source={require("../../../../assets/icon/work.png")}
           />
+          <IconText
+          text={status}
+          source={require("../../../../assets/icon/status.png")}
+          />
+            
         </View>
       </View>
     </TouchableOpacity>

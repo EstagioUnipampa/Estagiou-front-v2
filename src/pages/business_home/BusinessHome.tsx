@@ -22,6 +22,16 @@ type RootStackParamList = {
   BusinessHome: undefined;
   BusinessVacancy: undefined;
   BusinessVacancyCreation: undefined;
+  BusinessDetailsJobVacancy: {
+    businessName: string;
+    id: string;
+    title: string;
+    salary: string;
+    modality: string;
+    location: string;
+    logo: any;
+    description: string;
+  };
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -41,6 +51,7 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
     title: string;
     salary: string;
     modality: string;
+    description: string;
   };
 
   const [dataList, setDataList] = useState<JobVacancyList[]>([]);
@@ -172,7 +183,16 @@ export default function BusinessHome({ navigation }: Readonly<Props>) {
         {dataList.map((item) => (
           <AvailableCard
             key={item.id}
-            onPress={() => console.log("clicou")}
+            onPress={() => navigation.navigate('BusinessDetailsJobVacancy', { 
+              businessName: userData.name, 
+              id: item.id, 
+              title: item.title, 
+              salary: item.salary, 
+              modality: item.modality, 
+              location: item.modality,
+              logo: require("../../../assets/images/companyLogo2.png"), 
+              description: item.description
+            })}
             businessName={userData.name}
             title={item.title}
             salary={`R$ ${item.salary}`}

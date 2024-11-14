@@ -20,8 +20,11 @@ type RootStackParamList = {
     location: string;
     source: any;
     logo: ImageSourcePropType;
+    description: string;
+    id: string;
   };
   BottomTab: undefined;
+  BusinessVacancySubscribes: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<
@@ -37,6 +40,7 @@ type DetailsJobVacancyRouteProp = RouteProp<
 type Props = {
   navigation: HomeScreenNavigationProp;
   route: DetailsJobVacancyRouteProp;
+  
 };
 
 export default function DetailsJobVacancy({
@@ -44,7 +48,7 @@ export default function DetailsJobVacancy({
   route,
 }: Readonly<Props>) {
   console.log(route.params);
-  const { businessName, jobTitle, salary, logo, location } = route.params;
+  const { id, businessName, jobTitle, salary, logo, location, description } = route.params;
 
   return (
     <>
@@ -99,36 +103,7 @@ export default function DetailsJobVacancy({
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionTitle}>Descrição do Estágio</Text>
             <Text style={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              {description}
             </Text>
           </View>
 
@@ -136,7 +111,7 @@ export default function DetailsJobVacancy({
             <Button
               text="Inscrever-se"
               onPress={() => {
-                console.log("Inscrição realizada");
+                console.log(id);
               }}
             />
           </View>

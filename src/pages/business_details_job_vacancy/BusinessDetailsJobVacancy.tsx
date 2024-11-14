@@ -9,17 +9,18 @@ import {
   View,
   ScrollView,
 } from "react-native";
-import Button from "../../components/button/Button";
 import HeaderBack from "../../components/headerBack/HeaderBack";
 
 type RootStackParamList = {
   BusinessDetailsJobVacancy: {
     businessName: string;
-    jobTitle: string;
+    id: string;
+    title: string;
     salary: string;
-    location: string;
-    source: any;
+    modality: string;
     logo: ImageSourcePropType;
+    location: string;
+    description: string;
   };
   BottomTab: undefined;
   BusinessVacancySubscribes: undefined;
@@ -50,7 +51,7 @@ export default function BusinessDetailsJobVacancy({
   route,
 }: Readonly<Props>) {
   console.log(route.params);
-  const { businessName, jobTitle, salary, logo, location } = route.params;
+  const { businessName, title, salary, modality, logo, description } = route.params;
 
   return (
     <>
@@ -64,7 +65,7 @@ export default function BusinessDetailsJobVacancy({
           <View style={styles.header}>
             <View style={styles.textContainer}>
               <Text style={styles.businessName}>{businessName}</Text>
-              <Text style={styles.jobTitle}>{jobTitle}</Text>
+              <Text style={styles.jobTitle}>{title}</Text>
             </View>
             <Image source={logo} style={styles.logo} />
           </View>
@@ -95,7 +96,7 @@ export default function BusinessDetailsJobVacancy({
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.label}>Localização</Text>
-              <Text style={styles.value}>{location}</Text>
+              <Text style={styles.value}>{modality}</Text>
             </View>
           </View>
 
@@ -105,46 +106,8 @@ export default function BusinessDetailsJobVacancy({
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionTitle}>Descrição do Estágio</Text>
             <Text style={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
-              non ligula nec velit consequat gravida ac sit amet lorem. Aenean
-              ut magna sit amet urna facilisis aliquam. Nulla facilisi. Sed
-              tempor eros a tortor ullamcorper, eget fringilla nulla eleifend.
-              Donec bibendum lectus justo, eget elementum nulla tempor sed.
+              {description}
             </Text>
-          </View>
-
-          <View style={styles.buttonGroup}>
-            <Button
-              text="Visualizar Inscrições"
-              onPress={() => {
-                navigation.navigate("BusinessVacancySubscribes");
-              }}
-            />
           </View>
         </View>
       </ScrollView>

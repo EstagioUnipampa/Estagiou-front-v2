@@ -25,11 +25,13 @@ import * as SecureStore from "expo-secure-store";
 
 type RootStackParamList = {
   DetailsJobVacancy: {
+    id: string;
     businessName: string;
     jobTitle: string;
     logo: any;
     salary: string;
     location: string;
+    description: string;
   };
   StudentHome: undefined;
 };
@@ -58,6 +60,7 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
     title: string;
     salary: string;
     modality: string;
+    description: string;
     company: {
       name: string;
     };
@@ -253,7 +256,15 @@ export default function StudentHome({ navigation }: Readonly<Props>) {
         {dataList.map((item) => (
           <AvailableCard
             key={item.id}
-            onPress={() => console.log("clicou")}
+            onPress={() => navigation.navigate('DetailsJobVacancy', { 
+              id: item.id, 
+              businessName: item.company.name, 
+              jobTitle: item.title, 
+              logo: require("../../../assets/images/companyLogo2.png"), 
+              salary: item.salary, 
+              location: item.modality, 
+              description: item.description
+            })}
             businessName={item.company.name}
             title={item.title}
             salary={`R$ ${item.salary}`}
